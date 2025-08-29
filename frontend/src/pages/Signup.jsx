@@ -15,9 +15,9 @@ export const Signup = () => {
     e.preventDefault();
     try {
       const res = await register({ name, email, password });
-      if (res.status === 200) {
+      if (res && (res.status===200 || res.status===201)) {
         loginUser({ token: res.data.token, user: res.data.user });
-        navigate("/dashboard");
+        navigate("/register");
       } else {
         console.error("Invalid credentials");
       }
