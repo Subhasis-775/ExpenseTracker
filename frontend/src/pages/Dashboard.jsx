@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { addExpense, getExpenses } from "../services/expenses.js";
 import { AuthContext } from "../context/AuthContext";
 import ExpenseList from "../components/ExpenseList.jsx";
+import ExpenseFilter from "../components/ExpenseFilter.jsx";
 
 const Dashboard = () => {
   const { logoutUser, user } = useContext(AuthContext);
@@ -16,23 +17,39 @@ const Dashboard = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Lift expenses state to Dashboard
-  const [expenses, setExpenses] = useState([]);
+  // Filters & pagination state
+  const [filters, setFilters] = useState({
+    category: "",
+    startDate: "",
+    endDate: "",
+    sort: "newest",
+    limit: 10,
+    page: 1,
+  });
 
-  // Fetch all expenses
+  const [expensesData, setExpensesData] = useState({
+    expenses: [],
+    total: 0,
+    pages: 1,
+  });
+
+  // Fetch expenses based on filters
   const fetchExpenses = async () => {
     try {
-      const res = await getExpenses();
-      setExpenses(res.data);
+      const res = await getExpenses(filters);
+      setExpensesData({
+        expenses: res.data.expenses,
+        total: res.data.total,
+        pages: res.data.pages,
+      });
     } catch (err) {
       console.error("Failed to fetch expenses", err);
     }
   };
 
-  // Fetch expenses on mount
   useEffect(() => {
     fetchExpenses();
-  }, []);
+  }, [filters]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -51,7 +68,7 @@ const Dashboard = () => {
         date: "",
         notes: "",
       });
-      fetchExpenses(); // Refresh the list after adding
+      fetchExpenses(); // refresh list dynamically
     } catch (error) {
       setMessage(`❌ ${error.response?.data?.message || "Error adding expense"}`);
     } finally {
@@ -82,7 +99,7 @@ const Dashboard = () => {
       {/* Content */}
       <main className="px-4 py-10 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {/* Form */}
+          {/* Add Expense Form */}
           <div className="bg-white shadow-lg rounded-2xl p-8">
             <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
               Add New Expense
@@ -99,7 +116,6 @@ const Dashboard = () => {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Title */}
               <div>
                 <label className="block text-gray-700 mb-1">Title</label>
                 <input
@@ -112,8 +128,6 @@ const Dashboard = () => {
                   required
                 />
               </div>
-
-              {/* Amount */}
               <div>
                 <label className="block text-gray-700 mb-1">Amount</label>
                 <input
@@ -126,8 +140,6 @@ const Dashboard = () => {
                   required
                 />
               </div>
-
-              {/* Category */}
               <div>
                 <label className="block text-gray-700 mb-1">Category</label>
                 <select
@@ -149,8 +161,6 @@ const Dashboard = () => {
                   <option value="Other">Other</option>
                 </select>
               </div>
-
-              {/* Date */}
               <div>
                 <label className="block text-gray-700 mb-1">Date</label>
                 <input
@@ -162,8 +172,6 @@ const Dashboard = () => {
                   required
                 />
               </div>
-
-              {/* Notes */}
               <div>
                 <label className="block text-gray-700 mb-1">Notes</label>
                 <textarea
@@ -175,8 +183,6 @@ const Dashboard = () => {
                   rows="3"
                 />
               </div>
-
-              {/* Button */}
               <button
                 type="submit"
                 disabled={loading}
@@ -187,9 +193,15 @@ const Dashboard = () => {
             </form>
           </div>
 
-          {/* Expense List */}
+          {/* Expense List + Filters */}
           <div className="bg-white shadow-lg rounded-2xl p-8">
-            <ExpenseList expenses={expenses} fetchExpenses={fetchExpenses} />
+            <ExpenseFilter filters={filters} setFilters={setFilters} />
+            <ExpenseList
+              expensesData={expensesData}
+              filters={filters}
+              setFilters={setFilters}
+              fetchExpenses={fetchExpenses}
+            />
           </div>
         </div>
       </main>
