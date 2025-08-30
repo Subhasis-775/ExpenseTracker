@@ -3,6 +3,7 @@ import { addExpense, getExpenses } from "../services/expenses.js";
 import { AuthContext } from "../context/AuthContext";
 import ExpenseList from "../components/ExpenseList.jsx";
 import ExpenseFilter from "../components/ExpenseFilter.jsx";
+import { Menu, LogOut, User } from "lucide-react";
 
 const Dashboard = () => {
   const { logoutUser, user } = useContext(AuthContext);
@@ -16,6 +17,7 @@ const Dashboard = () => {
   });
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   // Filters & pagination state
   const [filters, setFilters] = useState({
@@ -61,9 +63,9 @@ const Dashboard = () => {
     try {
       await addExpense(formData);
       setMessage("✅ Expense added successfully!");
-      setTimeout(()=>{
+      setTimeout(() => {
         setMessage("");
-      },2000);
+      }, 2000);
       setFormData({
         title: "",
         amount: "",
@@ -73,7 +75,9 @@ const Dashboard = () => {
       });
       fetchExpenses(); // refresh list dynamically
     } catch (error) {
-      setMessage(`❌ ${error.response?.data?.message || "Error adding expense"}`);
+      setMessage(
+        `❌ ${error.response?.data?.message || "Error adding expense"}`
+      );
     } finally {
       setLoading(false);
     }
@@ -82,20 +86,43 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Navbar */}
-      <header className="bg-white shadow p-4 flex justify-between items-center">
+      <header className="bg-white shadow p-4 flex justify-between items-center relative">
         <h1 className="text-xl font-bold text-gray-800">💰 Expense Tracker</h1>
+
         <div className="flex items-center gap-4">
+          {/* Avatar Menu */}
           {user && (
-            <span className="text-gray-600 text-sm font-medium">
-              Welcome: <span className="font-bold">{user.name}</span>
-            </span>
+            <div className="relative">
+              <button
+                onClick={() => setShowMenu(!showMenu)}
+                className="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-full transition"
+              >
+                <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">
+                  {user.name?.[0]?.toUpperCase()}
+                </div>
+                <span className="hidden sm:block font-medium text-gray-700">
+                  {user.name}
+                </span>
+              </button>
+
+              {/* Dropdown */}
+              {showMenu && (
+                <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-xl border p-2 z-10">
+                  <button
+                    className="flex items-center w-full px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <User className="w-4 h-4 mr-2" /> Profile
+                  </button>
+                  <button
+                    onClick={logoutUser}
+                    className="flex items-center w-full px-3 py-2 text-red-600 hover:bg-red-100 rounded-lg"
+                  >
+                    <LogOut className="w-4 h-4 mr-2" /> Logout
+                  </button>
+                </div>
+              )}
+            </div>
           )}
-          <button
-            onClick={logoutUser}
-            className="bg-red-500 text-white px-4 py-1 rounded-lg hover:bg-red-600 transition"
-          >
-            Logout
-          </button>
         </div>
       </header>
 
@@ -111,7 +138,9 @@ const Dashboard = () => {
             {message && (
               <p
                 className={`mb-4 text-center font-medium ${
-                  message.startsWith("✅") ? "text-green-600" : "text-red-600"
+                  message.startsWith("✅")
+                    ? "text-green-600"
+                    : "text-red-600"
                 }`}
               >
                 {message}
