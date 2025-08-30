@@ -61,6 +61,9 @@ const Dashboard = () => {
     try {
       await addExpense(formData);
       setMessage("✅ Expense added successfully!");
+      setTimeout(()=>{
+        setMessage("");
+      },2000);
       setFormData({
         title: "",
         amount: "",
