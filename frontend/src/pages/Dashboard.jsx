@@ -3,10 +3,12 @@ import { addExpense, getExpenses } from "../services/expenses.js";
 import { AuthContext } from "../context/AuthContext";
 import ExpenseList from "../components/ExpenseList.jsx";
 import ExpenseFilter from "../components/ExpenseFilter.jsx";
-import { Menu, LogOut, User } from "lucide-react";
+import { LogOut, User, Zap } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const { logoutUser, user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     title: "",
@@ -35,7 +37,7 @@ const Dashboard = () => {
     pages: 1,
   });
 
-  // Fetch expenses based on filters
+  // Fetch expenses
   const fetchExpenses = async () => {
     try {
       const res = await getExpenses(filters);
@@ -63,9 +65,7 @@ const Dashboard = () => {
     try {
       await addExpense(formData);
       setMessage("✅ Expense added successfully!");
-      setTimeout(() => {
-        setMessage("");
-      }, 2000);
+      setTimeout(() => setMessage(""), 2000);
       setFormData({
         title: "",
         amount: "",
@@ -73,7 +73,7 @@ const Dashboard = () => {
         date: "",
         notes: "",
       });
-      fetchExpenses(); // refresh list dynamically
+      fetchExpenses();
     } catch (error) {
       setMessage(
         `❌ ${error.response?.data?.message || "Error adding expense"}`
@@ -90,7 +90,14 @@ const Dashboard = () => {
         <h1 className="text-xl font-bold text-gray-800">💰 Expense Tracker</h1>
 
         <div className="flex items-center gap-4">
-          {/* Avatar Menu */}
+          {/* Recurring Expenses Button */}
+          <button
+            onClick={() => navigate("/recurring")}
+            className="flex items-center gap-1 cursor-pointer bg-blue-500 hover:bg-blue-900 text-white px-3 py-1 rounded-lg font-medium"
+          >
+            <Zap className="w-4 h-4" /> Recurring
+          </button>
+
           {user && (
             <div className="relative">
               <button
@@ -105,12 +112,9 @@ const Dashboard = () => {
                 </span>
               </button>
 
-              {/* Dropdown */}
               {showMenu && (
                 <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-xl border p-2 z-10">
-                  <button
-                    className="flex items-center w-full px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
+                  <button className="flex items-center w-full px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                     <User className="w-4 h-4 mr-2" /> Profile
                   </button>
                   <button
@@ -126,9 +130,10 @@ const Dashboard = () => {
         </div>
       </header>
 
-      {/* Content */}
-      <main className="px-4 py-10 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      {/* Main Content */}
+      <main className="px-4 py-10 max-w-7xl mx-auto space-y-10">
+        {/* Row 1: Add Expense + Expense List */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Add Expense Form */}
           <div className="bg-white shadow-lg rounded-2xl p-8">
             <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
@@ -138,9 +143,7 @@ const Dashboard = () => {
             {message && (
               <p
                 className={`mb-4 text-center font-medium ${
-                  message.startsWith("✅")
-                    ? "text-green-600"
-                    : "text-red-600"
+                  message.startsWith("✅") ? "text-green-600" : "text-red-600"
                 }`}
               >
                 {message}
@@ -148,73 +151,58 @@ const Dashboard = () => {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-gray-700 mb-1">Title</label>
-                <input
-                  type="text"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleChange}
-                  placeholder="e.g., Grocery Shopping"
-                  className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 mb-1">Amount</label>
-                <input
-                  type="number"
-                  name="amount"
-                  value={formData.amount}
-                  onChange={handleChange}
-                  placeholder="e.g., 500"
-                  className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 mb-1">Category</label>
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  required
-                >
-                  <option value="">-- Select Category --</option>
-                  <option value="Food">Food</option>
-                  <option value="Shopping">Shopping</option>
-                  <option value="Entertainment">Entertainment</option>
-                  <option value="Education">Education</option>
-                  <option value="Bills">Bills</option>
-                  <option value="Healthcare">Healthcare</option>
-                  <option value="Travel">Travel</option>
-                  <option value="Utilities">Utilities</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-gray-700 mb-1">Date</label>
-                <input
-                  type="date"
-                  name="date"
-                  value={formData.date}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 mb-1">Notes</label>
-                <textarea
-                  name="notes"
-                  value={formData.notes}
-                  onChange={handleChange}
-                  placeholder="Optional notes about this expense..."
-                  className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  rows="3"
-                />
-              </div>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="e.g., Grocery Shopping"
+                className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+              <input
+                type="number"
+                name="amount"
+                value={formData.amount}
+                onChange={handleChange}
+                placeholder="e.g., 500"
+                className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                required
+              >
+                <option value="">-- Select Category --</option>
+                <option value="Food">Food</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Education">Education</option>
+                <option value="Bills">Bills</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Travel">Travel</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Other">Other</option>
+              </select>
+              <input
+                type="date"
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+              <textarea
+                name="notes"
+                value={formData.notes}
+                onChange={handleChange}
+                placeholder="Optional notes about this expense..."
+                className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                rows="3"
+              />
               <button
                 type="submit"
                 disabled={loading}
@@ -226,7 +214,7 @@ const Dashboard = () => {
           </div>
 
           {/* Expense List + Filters */}
-          <div className="bg-white shadow-lg rounded-2xl p-8">
+          <div className="bg-white shadow-lg rounded-2xl p-8 lg:col-span-2">
             <ExpenseFilter filters={filters} setFilters={setFilters} />
             <ExpenseList
               expensesData={expensesData}
