@@ -3,7 +3,17 @@ import { addExpense, getExpenses } from "../services/expenses.js";
 import { AuthContext } from "../context/AuthContext";
 import ExpenseList from "../components/ExpenseList.jsx";
 import ExpenseFilter from "../components/ExpenseFilter.jsx";
-import { LogOut, User, Zap } from "lucide-react";
+import CategoryPieChart from "../components/charts/CategoryPieChart.jsx";
+import MonthlyBarChart from "../components/charts/MonthlyBarChart.jsx";
+import {
+  LogOut,
+  User,
+  Zap,
+  CreditCard,
+  BarChart2,
+  Wallet,
+  Repeat,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
@@ -37,15 +47,71 @@ const Dashboard = () => {
     pages: 1,
   });
 
+  // Summary state
+  const [summary, setSummary] = useState({
+    total: 0,
+    monthly: 0,
+    count: 0,
+    recurring: 0,
+  });
+
+  // Chart data
+  const [categoryData, setCategoryData] = useState([]);
+  const [monthlyData, setMonthlyData] = useState([]);
+
   // Fetch expenses
   const fetchExpenses = async () => {
     try {
       const res = await getExpenses(filters);
+      const expenses = res.data.expenses || [];
+
       setExpensesData({
-        expenses: res.data.expenses,
+        expenses,
         total: res.data.total,
         pages: res.data.pages,
       });
+
+      // ✅ Prepare summary
+      const total = expenses.reduce((sum, e) => sum + Number(e.amount), 0);
+      const month = new Date().getMonth();
+      const monthly = expenses
+        .filter((e) => new Date(e.date).getMonth() === month)
+        .reduce((sum, e) => sum + Number(e.amount), 0);
+      const recurring = expenses.filter((e) => e.isRecurring).length;
+
+      setSummary({
+        total,
+        monthly,
+        count: expenses.length,
+        recurring,
+      });
+
+      // ✅ Prepare chart data
+      const categoryMap = {};
+      expenses.forEach((e) => {
+        categoryMap[e.category] =
+          (categoryMap[e.category] || 0) + Number(e.amount);
+      });
+      setCategoryData(
+        Object.entries(categoryMap).map(([category, amount]) => ({
+          category,
+          amount,
+        }))
+      );
+
+      const monthMap = {};
+      expenses.forEach((e) => {
+        const m = new Date(e.date).toLocaleString("default", {
+          month: "short",
+        });
+        monthMap[m] = (monthMap[m] || 0) + Number(e.amount);
+      });
+      setMonthlyData(
+        Object.entries(monthMap).map(([month, amount]) => ({
+          month,
+          amount,
+        }))
+      );
     } catch (err) {
       console.error("Failed to fetch expenses", err);
     }
@@ -90,12 +156,13 @@ const Dashboard = () => {
         <h1 className="text-xl font-bold text-gray-800">💰 Expense Tracker</h1>
 
         <div className="flex items-center gap-4">
-          {/* Recurring Expenses Button */}
+          {/* ✅ New Recurring Manager Button */}
           <button
             onClick={() => navigate("/recurring")}
-            className="flex items-center gap-1 cursor-pointer bg-blue-500 hover:bg-blue-900 text-white px-3 py-1 rounded-lg font-medium"
+            className="flex items-center gap-2 bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-2 rounded-lg font-medium transition"
           >
-            <Zap className="w-4 h-4" /> Recurring
+            <Repeat className="w-4 h-4" />
+            Recurring Manager
           </button>
 
           {user && (
@@ -132,10 +199,46 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <main className="px-4 py-10 max-w-7xl mx-auto space-y-10">
+        {/* ✅ Row 0: Summary Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="bg-white shadow rounded-2xl p-6 flex items-center gap-4">
+            <Wallet className="w-10 h-10 text-blue-500" />
+            <div>
+              <h3 className="text-sm text-gray-500">Total Expenses</h3>
+              <p className="text-2xl font-bold">₹{summary.total}</p>
+            </div>
+          </div>
+          <div className="bg-white shadow rounded-2xl p-6 flex items-center gap-4">
+            <BarChart2 className="w-10 h-10 text-green-500" />
+            <div>
+              <h3 className="text-sm text-gray-500">This Month</h3>
+              <p className="text-2xl font-bold">₹{summary.monthly}</p>
+            </div>
+          </div>
+          <div className="bg-white shadow rounded-2xl p-6 flex items-center gap-4">
+            <CreditCard className="w-10 h-10 text-purple-500" />
+            <div>
+              <h3 className="text-sm text-gray-500">Transactions</h3>
+              <p className="text-2xl font-bold">{summary.count}</p>
+            </div>
+          </div>
+          {/* ✅ Recurring card navigates to RecurringManager */}
+          <button
+            onClick={() => navigate("/recurring")}
+            className="bg-white shadow rounded-2xl p-6 flex items-center gap-4 hover:bg-yellow-50 transition"
+          >
+            <Zap className="w-10 h-10 text-yellow-500" />
+            <div className="text-left">
+              <h3 className="text-sm text-gray-500">Recurring</h3>
+              {/* <p className="text-2xl font-bold">{summary.recurring}</p> */}
+            </div>
+          </button>
+        </div>
+
         {/* Row 1: Add Expense + Expense List */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Add Expense Form */}
-          <div className="bg-white shadow-lg rounded-2xl p-8">
+          <div className="bg-white shadow rounded-2xl p-8">
             <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
               Add New Expense
             </h2>
@@ -214,7 +317,7 @@ const Dashboard = () => {
           </div>
 
           {/* Expense List + Filters */}
-          <div className="bg-white shadow-lg rounded-2xl p-8 lg:col-span-2">
+          <div className="bg-white shadow rounded-2xl p-8 lg:col-span-2">
             <ExpenseFilter filters={filters} setFilters={setFilters} />
             <ExpenseList
               expensesData={expensesData}
@@ -222,6 +325,18 @@ const Dashboard = () => {
               setFilters={setFilters}
               fetchExpenses={fetchExpenses}
             />
+          </div>
+        </div>
+
+        {/* Row 2: Charts */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          <div className="bg-white shadow rounded-2xl p-6">
+            <h2 className="font-semibold mb-4">Expenses by Category</h2>
+            <CategoryPieChart data={categoryData} />
+          </div>
+          <div className="bg-white shadow rounded-2xl p-6">
+            <h2 className="font-semibold mb-4">Monthly Spending Trend</h2>
+            <MonthlyBarChart data={monthlyData} />
           </div>
         </div>
       </main>
