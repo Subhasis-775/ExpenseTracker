@@ -6,6 +6,7 @@ import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import expenseRoutes from './routes/expenseRoutes.js'
 import recurringRoutes from './routes/recurringRoutes.js';
+import reportsRoute from './routes/reportsRoute.js';
 import { processRecurring } from './controllers/recurringControl.js';
 dotenv.config();
 connectDB();
@@ -17,6 +18,7 @@ app.use(express.urlencoded({extended:true}));
 app.use('/api/auth',authRoutes);
 app.use('/api/expenses',expenseRoutes);
 app.use('/api/recurring',recurringRoutes);
+app.use('/api/reports',reportsRoute);
 cron.schedule("0 0 * * *",async()=>{
     console.log("Running recurring expenses cron job");
     await processRecurring();

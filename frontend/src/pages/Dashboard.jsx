@@ -5,6 +5,7 @@ import ExpenseList from "../components/ExpenseList.jsx";
 import ExpenseFilter from "../components/ExpenseFilter.jsx";
 import CategoryPieChart from "../components/charts/CategoryPieChart.jsx";
 import MonthlyBarChart from "../components/charts/MonthlyBarChart.jsx";
+import downloadReport  from "../services/report.js";
 import {
   LogOut,
   User,
@@ -13,6 +14,7 @@ import {
   BarChart2,
   Wallet,
   Repeat,
+  FileDown,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -59,6 +61,10 @@ const Dashboard = () => {
   const [categoryData, setCategoryData] = useState([]);
   const [monthlyData, setMonthlyData] = useState([]);
 
+  // Report state
+  const [month, setMonth] = useState(new Date().getMonth() + 1); // default: current month (1-12)
+  const [year, setYear] = useState(new Date().getFullYear());
+
   // Fetch expenses
   const fetchExpenses = async () => {
     try {
@@ -73,9 +79,9 @@ const Dashboard = () => {
 
       // ✅ Prepare summary
       const total = expenses.reduce((sum, e) => sum + Number(e.amount), 0);
-      const month = new Date().getMonth();
+      const monthNow = new Date().getMonth();
       const monthly = expenses
-        .filter((e) => new Date(e.date).getMonth() === month)
+        .filter((e) => new Date(e.date).getMonth() === monthNow)
         .reduce((sum, e) => sum + Number(e.amount), 0);
       const recurring = expenses.filter((e) => e.isRecurring).length;
 
@@ -147,6 +153,10 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDownload = () => {
+    downloadReport(month, year);
   };
 
   return (
@@ -232,6 +242,54 @@ const Dashboard = () => {
               <h3 className="text-sm text-gray-500">Recurring</h3>
               {/* <p className="text-2xl font-bold">{summary.recurring}</p> */}
             </div>
+          </button>
+        </div>
+
+        {/* ✅ Row 0.5: PDF Report Download */}
+        <div className="bg-white shadow rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-4">
+          <select
+            value={month}
+            onChange={(e) => setMonth(Number(e.target.value))}
+            className="border border-gray-300 rounded-lg p-2"
+          >
+            {[
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "May",
+              "Jun",
+              "Jul",
+              "Aug",
+              "Sep",
+              "Oct",
+              "Nov",
+              "Dec",
+            ].map((m, i) => (
+              <option key={i + 1} value={i + 1}>
+                {m}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={year}
+            onChange={(e) => setYear(Number(e.target.value))}
+            className="border border-gray-300 rounded-lg p-2"
+          >
+            {[2023, 2024, 2025, 2026].map((y) => (
+              <option key={y} value={y}>
+                {y}
+              </option>
+            ))}
+          </select>
+
+          <button
+            onClick={handleDownload}
+            className="flex cursor-pointer items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition"
+          >
+            <FileDown className="w-5 h-5" />
+            Download Report
           </button>
         </div>
 
