@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { login } from "../services/auth.js";
+import toast from "react-hot-toast";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,77 +17,81 @@ export const Login = () => {
     try {
       const res = await login({ email, password });
       loginUser({ token: res.data.token, user: res.data.user });
+
+      toast.success("Logged in successfully!");
       navigate("/dashboard");
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Invalid credentials. Please try again."
-      );
+      const msg =
+        err.response?.data?.message || "Invalid credentials. Please try again.";
+      setError(msg);
+      toast.error("Login failed. Please try again.");
       console.error(err);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-purple-100 px-4">
-      <div className="w-full max-w-md backdrop-blur-xl bg-white/80 rounded-3xl shadow-2xl border border-purple-100 p-8 animate-fadeIn">
-        <h2 className="text-4xl font-extrabold text-center text-gray-800 mb-4 tracking-tight">
-          Welcome Back 👋
-        </h2>
-        <p className="text-center text-gray-500 mb-8 text-sm">
-          Login to continue to your dashboard
-        </p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="w-full max-w-4xl bg-white shadow-md rounded-2xl grid md:grid-cols-2 overflow-hidden">
+        {/* Left side (branding / info) */}
+        <div className="hidden md:flex flex-col justify-center items-center bg-blue-50 p-8">
+          <h2 className="text-3xl font-bold text-blue-700">💰 Expense Tracker</h2>
+          <p className="text-gray-600 mt-4 text-center">
+            Manage your daily spending, track recurring expenses, and generate reports with ease.
+          </p>
+        </div>
 
-        {error && (
-          <div className="mb-4 p-3 rounded-lg bg-red-100 text-red-700 text-center font-medium border border-red-200 shadow-sm animate-shake">
-            {error}
-          </div>
-        )}
+        {/* Right side (form) */}
+        <div className="p-8 flex flex-col justify-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2 text-center">
+            Welcome Back 👋
+          </h2>
+          <p className="text-gray-500 text-center mb-6">
+            Login to continue to your dashboard
+          </p>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Email Address
-            </label>
+          {error && (
+            <div className="mb-4 p-3 rounded-lg bg-red-100 text-red-700 text-center font-medium shadow-sm">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-5">
             <input
               type="email"
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
             />
-          </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Password
-            </label>
             <input
               type="password"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
             />
-          </div>
 
-          <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white font-semibold py-3 rounded-xl hover:from-purple-700 hover:to-purple-800 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
-          >
-            Login
-          </button>
-        </form>
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-700 shadow-md transition"
+            >
+              Login
+            </button>
+          </form>
 
-        <p className="mt-8 text-center text-gray-600 text-sm">
-          Don&apos;t have an account?{" "}
-          <Link
-            to="/signup"
-            className="text-purple-600 font-semibold hover:underline hover:text-purple-700 transition-colors"
-          >
-            Register here
-          </Link>
-        </p>
+          <p className="mt-6 text-center text-gray-600 text-sm">
+            Don&apos;t have an account?{" "}
+            <Link
+              to="/signup"
+              className="text-blue-600 font-semibold hover:underline"
+            >
+              Register here
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
