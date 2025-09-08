@@ -49,7 +49,7 @@ export default function ExpenseFilter({ filters, setFilters }) {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="mt-4 p-4 border rounded-lg shadow bg-gray-50"
+            className="mt-4 p-4 border rounded-lg shadow bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
           >
             {/* Category Filter */}
             <div className="mb-4">
@@ -57,7 +57,7 @@ export default function ExpenseFilter({ filters, setFilters }) {
               <select
                 value={filters.category || ""}
                 onChange={(e) => handleFilterChange("category", e.target.value)}
-                className="w-full px-3 py-2 border rounded-lg"
+                className="w-full px-3 py-2 border rounded-lg dark:bg-gray-900 dark:text-gray-100"
               >
                 <option value="">All</option>
                 {categories.map((cat) => (
@@ -75,7 +75,7 @@ export default function ExpenseFilter({ filters, setFilters }) {
                 type="date"
                 value={filters.startDate || ""}
                 onChange={(e) => handleFilterChange("startDate", e.target.value)}
-                className="w-full px-3 py-2 border rounded-lg"
+                className="w-full px-3 py-2 border rounded-lg dark:bg-gray-900 dark:text-gray-100"
               />
             </div>
             <div className="mb-4">
@@ -84,7 +84,7 @@ export default function ExpenseFilter({ filters, setFilters }) {
                 type="date"
                 value={filters.endDate || ""}
                 onChange={(e) => handleFilterChange("endDate", e.target.value)}
-                className="w-full px-3 py-2 border rounded-lg"
+                className="w-full px-3 py-2 border rounded-lg dark:bg-gray-900 dark:text-gray-100"
               />
             </div>
 
@@ -94,7 +94,7 @@ export default function ExpenseFilter({ filters, setFilters }) {
               <select
                 value={filters.sort || ""}
                 onChange={(e) => handleFilterChange("sort", e.target.value)}
-                className="w-full px-3 py-2 border rounded-lg"
+                className="w-full px-3 py-2 border rounded-lg dark:bg-gray-900 dark:text-gray-100"
               >
                 <option value="">Default</option>
                 <option value="amount_asc">Amount (Low → High)</option>
@@ -114,7 +114,7 @@ export default function ExpenseFilter({ filters, setFilters }) {
             value ? (
               <span
                 key={key}
-                className="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full"
+                className="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full dark:bg-blue-900 dark:text-blue-200"
               >
                 {key}: {value}
               </span>

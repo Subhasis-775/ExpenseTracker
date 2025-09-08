@@ -2,16 +2,18 @@
 import { useState, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { Menu, X, LogOut } from "lucide-react";
+import { DarkModeContext } from "../context/DarkModeContext"; // ✅ Import Dark Mode Context
+import { Menu, X, LogOut, Sun, Moon } from "lucide-react"; // ✅ Icons
 
 export default function Layout({ children }) {
-  const { user, logout } = useContext(AuthContext);
+  const { user, logoutUser } = useContext(AuthContext);
+  const { darkMode, toggleDarkMode } = useContext(DarkModeContext); // ✅ Dark mode state
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    logout();
+    logoutUser();
     navigate("/login");
   };
 
@@ -24,10 +26,10 @@ export default function Layout({ children }) {
       .slice(0, 2);
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="min-h-screen flex bg-gray-50 dark:bg-gray-900">
       {/* Sidebar */}
       <aside
-        className={`fixed md:static top-0 left-0 h-full w-64 bg-white shadow-md p-4 transform transition-transform duration-300 z-40
+        className={`fixed md:static top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-md p-4 transform transition-transform duration-300 z-40
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
       >
         {/* ✅ Branding */}
@@ -35,7 +37,7 @@ export default function Layout({ children }) {
           <div className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-600 text-white font-bold text-xl shadow">
             ₹
           </div>
-          <span className="text-xl font-extrabold text-gray-800">
+          <span className="text-xl font-extrabold text-gray-800 dark:text-gray-100">
             Expense <span className="text-blue-600">Tracker</span>
           </span>
         </div>
@@ -48,7 +50,7 @@ export default function Layout({ children }) {
               `block px-4 py-2 rounded-lg transition ${
                 isActive
                   ? "bg-blue-100 text-blue-600 font-medium"
-                  : "text-gray-700 hover:bg-gray-100"
+                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
               }`
             }
           >
@@ -60,7 +62,7 @@ export default function Layout({ children }) {
               `block px-4 py-2 rounded-lg transition ${
                 isActive
                   ? "bg-blue-100 text-blue-600 font-medium"
-                  : "text-gray-700 hover:bg-gray-100"
+                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
               }`
             }
           >
@@ -80,50 +82,61 @@ export default function Layout({ children }) {
       {/* Main content area */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="sticky top-0 bg-white shadow-md z-20 flex items-center justify-between px-4 py-3">
+        <header className="sticky top-0 bg-white dark:bg-gray-800 shadow-md z-20 flex items-center justify-between px-4 py-3">
           {/* Sidebar toggle on mobile */}
           <button
-            className="md:hidden text-gray-600"
+            className="md:hidden text-gray-600 dark:text-gray-200"
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >
             {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
-          <h1 className="text-lg font-semibold text-gray-800">
+          <h1 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
             Expense Tracker
           </h1>
 
-          {/* ✅ Avatar with dropdown */}
-          <div className="relative">
+          {/* ✅ Right Section: Dark mode + Avatar */}
+          <div className="flex items-center space-x-3">
+            {/* Dark Mode Toggle */}
             <button
-              onClick={() => setUserMenuOpen(!userMenuOpen)}
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-500 text-white font-semibold shadow"
+              onClick={toggleDarkMode}
+              className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 shadow"
             >
-              {getInitials(user?.name || user?.email || "U")}
+              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
-            {userMenuOpen && (
-              <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-md z-50">
-                {/* Profile button */}
-                <button
-                  onClick={() => {
-                    setUserMenuOpen(false);
-                    navigate("/profile");
-                  }}
-                  className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  👤 Profile
-                </button>
 
-                {/* Logout button */}
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  <LogOut size={16} className="mr-2" />
-                  Logout
-                </button>
-              </div>
-            )}
+            {/* Avatar with dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-500 text-white font-semibold shadow"
+              >
+                {getInitials(user?.name || user?.email || "U")}
+              </button>
+              {userMenuOpen && (
+                <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-lg shadow-md z-50">
+                  {/* Profile button */}
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      navigate("/profile");
+                    }}
+                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                  >
+                    👤 Profile
+                  </button>
+
+                  {/* Logout button */}
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                  >
+                    <LogOut size={16} className="mr-2" />
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </header>
 

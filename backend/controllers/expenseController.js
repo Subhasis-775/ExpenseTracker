@@ -1,50 +1,50 @@
 import Expense from '../models/expenseModel.js';
 // Get all expenses
-export const getExpenses=async(req,res)=>{
-    try{
-        const {category,startDate,endDate,sort,page=1,limit=10}=req.query;
-        let query={userId:req.user.id||req.user._id};
-        if(category){
-            query.category=category;
-        }
-        if(startDate && endDate){
-            query.date={
-                $gte:new Date(startDate),
-                $lte:new Date(endDate)
-            }
-        }
-        else if(startDate){
-            query.date={$gte:new Date(startDate)};
-        }
-        else if(endDate){
-            query.date={$lte:new Date(endDate)}
-        }
-        const sortMap={
-            newest:{date:-1},
-            oldest:{date:1},
-            amountAsc:{amount:1},
-            amountDesc:{amount:-1},
-            title:{title:1}
-        };
-        const sortOption=sortMap[sort]||sortMap["newest"];
-        const skip=(page-1)*limit;
-        const expenses=await Expense.find(query).sort(sortOption)
-        .skip(skip).limit(parseInt(limit));
-        const total=await Expense.countDocuments(query);
-        res.status(200).json({
-            success:true,
-            total,
-            count:expenses.length,
-            page:Number(page),
-            pages:Math.ceil(total/limit),
-            expenses
-        })
+export const getExpenses = async (req, res) => {
+  try {
+    const { category, startDate, endDate, sort, page = 1 } = req.query;
+    const limit = 5; // fixed limit
+
+    let query = { userId: req.user.id || req.user._id };
+
+    if (category) query.category = category;
+
+    if (startDate && endDate) {
+      query.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
+    } else if (startDate) {
+      query.date = { $gte: new Date(startDate) };
+    } else if (endDate) {
+      query.date = { $lte: new Date(endDate) };
     }
-    catch(error){
-        console.error(error);
-        res.status(500).json({message:`error fetching expenses ${error.message}`})
-    }
+
+    const sortMap = {
+      newest: { date: -1 },
+      oldest: { date: 1 },
+      amountAsc: { amount: 1 },
+      amountDesc: { amount: -1 },
+      title: { title: 1 },
+    };
+
+    const sortOption = sortMap[sort] || sortMap.newest;
+    const skip = (page - 1) * limit;
+
+    const expenses = await Expense.find(query).sort(sortOption).skip(skip).limit(limit);
+    const total = await Expense.countDocuments(query);
+
+    res.status(200).json({
+      success: true,
+      total,
+      count: expenses.length,
+      page: Number(page),
+      pages: Math.ceil(total / limit),
+      expenses,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: `Error fetching expenses: ${error.message}` });
+  }
 };
+
 // add Expenses
 export const addExpense=async(req,res)=>{
     const {title,amount,category,date,notes}=req.body;

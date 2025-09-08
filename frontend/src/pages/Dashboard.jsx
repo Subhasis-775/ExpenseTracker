@@ -1,4 +1,3 @@
-// src/pages/Dashboard.jsx
 import { useState, useContext, useEffect } from "react";
 import { addExpense, getExpenses } from "../services/expenses.js";
 import { AuthContext } from "../context/AuthContext";
@@ -7,9 +6,17 @@ import ExpenseFilter from "../components/ExpenseFilter.jsx";
 import CategoryPieChart from "../components/charts/CategoryPieChart.jsx";
 import MonthlyBarChart from "../components/charts/MonthlyBarChart.jsx";
 import downloadReport from "../services/report.js";
-import { Wallet, BarChart2, CreditCard, Zap, FileDown } from "lucide-react";
+import {
+  Wallet,
+  BarChart2,
+  CreditCard,
+  Zap,
+  FileDown,
+  MessageSquare,
+} from "lucide-react";
 import { toast } from "react-hot-toast";
 import Layout from "../components/Layout.jsx";
+import AIChatBox from "../components/AIChatBox.jsx";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -22,11 +29,10 @@ const Dashboard = () => {
     notes: "",
   });
 
-  const [error, setError] = useState(""); // ✅ inline error messages
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [fetching, setFetching] = useState(false); // ✅ expense loading state
+  const [fetching, setFetching] = useState(false);
 
-  // Filters & pagination state
   const [filters, setFilters] = useState({
     category: "",
     startDate: "",
@@ -42,7 +48,6 @@ const Dashboard = () => {
     pages: 1,
   });
 
-  // Summary state
   const [summary, setSummary] = useState({
     total: 0,
     monthly: 0,
@@ -50,9 +55,11 @@ const Dashboard = () => {
     recurring: 0,
   });
 
-  // Chart data
   const [categoryData, setCategoryData] = useState([]);
   const [monthlyData, setMonthlyData] = useState([]);
+
+  // AI Chat toggle
+  const [showChat, setShowChat] = useState(false);
 
   // Report state
   const [month, setMonth] = useState(new Date().getMonth() + 1);
@@ -76,7 +83,7 @@ const Dashboard = () => {
         pages: res.data.pages,
       });
 
-      // ✅ Prepare summary
+      // Summary
       const total = expenses.reduce((sum, e) => sum + Number(e.amount), 0);
       const monthNow = new Date().getMonth();
       const monthly = expenses
@@ -91,7 +98,7 @@ const Dashboard = () => {
         recurring,
       });
 
-      // ✅ Prepare chart data
+      // Charts
       const categoryMap = {};
       expenses.forEach((e) => {
         categoryMap[e.category] =
@@ -106,16 +113,11 @@ const Dashboard = () => {
 
       const monthMap = {};
       expenses.forEach((e) => {
-        const m = new Date(e.date).toLocaleString("default", {
-          month: "short",
-        });
+        const m = new Date(e.date).toLocaleString("default", { month: "short" });
         monthMap[m] = (monthMap[m] || 0) + Number(e.amount);
       });
       setMonthlyData(
-        Object.entries(monthMap).map(([month, amount]) => ({
-          month,
-          amount,
-        }))
+        Object.entries(monthMap).map(([month, amount]) => ({ month, amount }))
       );
     } catch (err) {
       setError("❌ Failed to fetch expenses");
@@ -140,13 +142,7 @@ const Dashboard = () => {
     try {
       await addExpense(formData);
       toast.success("✅ Expense added successfully!");
-      setFormData({
-        title: "",
-        amount: "",
-        category: "",
-        date: "",
-        notes: "",
-      });
+      setFormData({ title: "", amount: "", category: "", date: "", notes: "" });
       fetchExpenses();
     } catch (error) {
       setError(error.response?.data?.message || "Error adding expense");
@@ -161,59 +157,74 @@ const Dashboard = () => {
       await downloadReport(month, year);
       toast.success("✅ Report downloaded successfully!");
     } catch (err) {
-      setError("❌ Failed to download report");
+      setError("❌ Failed to download report", err);
       toast.error("❌ Report download failed");
     }
   };
 
   return (
     <Layout>
-      <div className="px-4 py-8 space-y-10">
-        {/* ✅ Inline Error Notification */}
+      <div className="px-4 py-8 space-y-10 relative">
         {error && (
-          <div className="text-red-600 bg-red-100 p-3 rounded-lg text-center font-medium">
+          <div className="text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/40 p-3 rounded-lg text-center font-medium">
             {error}
           </div>
         )}
 
-        {/* Row 0: Summary Cards */}
+        {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-white shadow-md rounded-2xl p-6 flex items-center gap-4">
+          <div className="bg-white dark:bg-gray-800 shadow-md rounded-2xl p-6 flex items-center gap-4">
             <Wallet className="w-10 h-10 text-blue-500" />
             <div>
-              <h3 className="text-sm text-gray-500">Total Expenses</h3>
-              <p className="text-2xl font-bold">₹{summary.total}</p>
+              <h3 className="text-sm text-gray-500 dark:text-gray-400">
+                Total Expenses
+              </h3>
+              <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                ₹{summary.total}
+              </p>
             </div>
           </div>
-          <div className="bg-white shadow-md rounded-2xl p-6 flex items-center gap-4">
+          <div className="bg-white dark:bg-gray-800 shadow-md rounded-2xl p-6 flex items-center gap-4">
             <BarChart2 className="w-10 h-10 text-green-500" />
             <div>
-              <h3 className="text-sm text-gray-500">This Month</h3>
-              <p className="text-2xl font-bold">₹{summary.monthly}</p>
+              <h3 className="text-sm text-gray-500 dark:text-gray-400">
+                This Month
+              </h3>
+              <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                ₹{summary.monthly}
+              </p>
             </div>
           </div>
-          <div className="bg-white shadow-md rounded-2xl p-6 flex items-center gap-4">
+          <div className="bg-white dark:bg-gray-800 shadow-md rounded-2xl p-6 flex items-center gap-4">
             <CreditCard className="w-10 h-10 text-purple-500" />
             <div>
-              <h3 className="text-sm text-gray-500">Transactions</h3>
-              <p className="text-2xl font-bold">{summary.count}</p>
+              <h3 className="text-sm text-gray-500 dark:text-gray-400">
+                Transactions
+              </h3>
+              <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                {summary.count}
+              </p>
             </div>
           </div>
-          <div className="bg-white shadow-md rounded-2xl p-6 flex items-center gap-4">
+          <div className="bg-white dark:bg-gray-800 shadow-md rounded-2xl p-6 flex items-center gap-4">
             <Zap className="w-10 h-10 text-yellow-500" />
             <div>
-              <h3 className="text-sm text-gray-500">Recurring</h3>
-              <p className="text-2xl font-bold">{summary.recurring}</p>
+              <h3 className="text-sm text-gray-500 dark:text-gray-400">
+                Recurring
+              </h3>
+              <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                {summary.recurring}
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Row 0.5: PDF Report Download */}
-        <div className="bg-white shadow-md rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-4">
+        {/* PDF Report */}
+        <div className="bg-white dark:bg-gray-800 shadow-md rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-4">
           <select
             value={month}
             onChange={(e) => setMonth(Number(e.target.value))}
-            className="border border-gray-300 rounded-lg p-2"
+            className="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg p-2"
           >
             {[
               "Jan",
@@ -238,7 +249,7 @@ const Dashboard = () => {
           <select
             value={year}
             onChange={(e) => setYear(Number(e.target.value))}
-            className="border border-gray-300 rounded-lg p-2"
+            className="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg p-2"
           >
             {[2023, 2024, 2025, 2026].map((y) => (
               <option key={y} value={y}>
@@ -256,11 +267,11 @@ const Dashboard = () => {
           </button>
         </div>
 
-        {/* Row 1: Add Expense + Expense List */}
+        {/* Add Expense + Expense List */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Add Expense Form */}
-          <div className="bg-white shadow-md rounded-2xl p-8">
-            <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
+          <div className="bg-white dark:bg-gray-800 shadow-md rounded-2xl p-8">
+            <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-gray-100 mb-6">
               Add New Expense
             </h2>
 
@@ -271,7 +282,7 @@ const Dashboard = () => {
                 value={formData.title}
                 onChange={handleChange}
                 placeholder="e.g., Grocery Shopping"
-                className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg p-2"
                 required
               />
               <input
@@ -280,14 +291,14 @@ const Dashboard = () => {
                 value={formData.amount}
                 onChange={handleChange}
                 placeholder="e.g., 500"
-                className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg p-2"
                 required
               />
               <select
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg p-2"
                 required
               >
                 <option value="">-- Select Category --</option>
@@ -306,7 +317,7 @@ const Dashboard = () => {
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg p-2"
                 required
               />
               <textarea
@@ -314,7 +325,7 @@ const Dashboard = () => {
                 value={formData.notes}
                 onChange={handleChange}
                 placeholder="Optional notes..."
-                className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg p-2"
                 rows="3"
               />
               <button
@@ -328,7 +339,7 @@ const Dashboard = () => {
           </div>
 
           {/* Expense List + Filters */}
-          <div className="bg-white shadow-md rounded-2xl p-8 lg:col-span-2">
+          <div className="bg-white dark:bg-gray-800 shadow-md rounded-2xl p-8 lg:col-span-2">
             <ExpenseFilter filters={filters} setFilters={setFilters} />
 
             {fetching ? (
@@ -346,17 +357,32 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Row 2: Charts */}
+        {/* Charts */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          <div className="bg-white shadow-md rounded-2xl p-6">
-            <h2 className="font-semibold mb-4">Expenses by Category</h2>
+          <div className="bg-white dark:bg-gray-800 shadow-md rounded-2xl p-6">
+            <h2 className="font-semibold mb-4 text-gray-800 dark:text-gray-100">
+              Expenses by Category
+            </h2>
             <CategoryPieChart data={categoryData} />
           </div>
-          <div className="bg-white shadow-md rounded-2xl p-6">
-            <h2 className="font-semibold mb-4">Monthly Spending Trend</h2>
+          <div className="bg-white dark:bg-gray-800 shadow-md rounded-2xl p-6">
+            <h2 className="font-semibold mb-4 text-gray-800 dark:text-gray-100">
+              Monthly Spending Trend
+            </h2>
             <MonthlyBarChart data={monthlyData} />
           </div>
         </div>
+
+        {/* Floating AI Chat Icon */}
+        <button
+          onClick={() => setShowChat(true)}
+          className="cursor-pointer fixed bottom-6 right-6 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-lg transition"
+        >
+          <MessageSquare className="w-6 h-6" />
+        </button>
+
+        {/* AI Chat Box */}
+        {showChat && <AIChatBox onClose={() => setShowChat(false)} />}
       </div>
     </Layout>
   );

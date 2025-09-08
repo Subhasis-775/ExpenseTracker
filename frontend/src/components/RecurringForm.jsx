@@ -29,21 +29,26 @@ const RecurringForm = ({ onAdded }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white shadow-xl rounded-3xl p-6 transition-all duration-500">
+    <div className="max-w-md mx-auto bg-white dark:bg-gray-900 shadow-xl rounded-3xl p-6 transition-all duration-500">
       {!showForm ? (
         <button
           onClick={() => setShowForm(true)}
-          className="w-full flex items-center justify-center gap-3 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-4 rounded-2xl shadow-lg text-lg transition-transform transform hover:scale-105"
+          className="w-full flex items-center justify-center gap-3 
+            bg-yellow-500 hover:bg-yellow-600 text-white font-bold 
+            py-4 rounded-2xl shadow-lg text-lg 
+            transition-transform transform hover:scale-105"
         >
           <Plus className="w-5 h-5" /> Add Recurring Expense
         </button>
       ) : (
         <div className="space-y-4">
           <div className="flex justify-between items-center mb-2">
-            <h3 className="text-xl font-bold text-gray-800">New Recurring Expense</h3>
+            <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">
+              New Recurring Expense
+            </h3>
             <button
               onClick={() => setShowForm(false)}
-              className="text-gray-500 hover:text-gray-800 transition"
+              className="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition"
             >
               <X className="w-5 h-5" />
             </button>
@@ -56,7 +61,12 @@ const RecurringForm = ({ onAdded }) => {
               onChange={handleChange}
               placeholder="Expense Title"
               required
-              className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-yellow-500 focus:outline-none transition"
+              className="w-full border border-gray-300 dark:border-gray-700 
+                p-3 rounded-xl 
+                bg-white dark:bg-gray-800 
+                text-gray-800 dark:text-gray-100 
+                placeholder-gray-400 dark:placeholder-gray-500
+                focus:ring-2 focus:ring-yellow-500 focus:outline-none transition"
             />
             <input
               type="number"
@@ -65,13 +75,22 @@ const RecurringForm = ({ onAdded }) => {
               onChange={handleChange}
               placeholder="Amount"
               required
-              className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-yellow-500 focus:outline-none transition"
+              className="w-full border border-gray-300 dark:border-gray-700 
+                p-3 rounded-xl 
+                bg-white dark:bg-gray-800 
+                text-gray-800 dark:text-gray-100 
+                placeholder-gray-400 dark:placeholder-gray-500
+                focus:ring-2 focus:ring-yellow-500 focus:outline-none transition"
             />
             <select
               name="frequency"
               value={formData.frequency}
               onChange={handleChange}
-              className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-yellow-500 focus:outline-none transition"
+              className="w-full border border-gray-300 dark:border-gray-700 
+                p-3 rounded-xl 
+                bg-white dark:bg-gray-800 
+                text-gray-800 dark:text-gray-100 
+                focus:ring-2 focus:ring-yellow-500 focus:outline-none transition"
             >
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
@@ -83,19 +102,29 @@ const RecurringForm = ({ onAdded }) => {
               value={formData.nextDue}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-yellow-500 focus:outline-none transition"
+              className="w-full border border-gray-300 dark:border-gray-700 
+                p-3 rounded-xl 
+                bg-white dark:bg-gray-800 
+                text-gray-800 dark:text-gray-100 
+                focus:ring-2 focus:ring-yellow-500 focus:outline-none transition"
             />
             <div className="flex gap-3">
               <button
                 type="submit"
-                className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 rounded-2xl shadow-lg transition-transform transform hover:scale-105"
+                className="flex-1 bg-yellow-500 hover:bg-yellow-600 
+                  text-white font-bold py-3 rounded-2xl shadow-lg 
+                  transition-transform transform hover:scale-105"
               >
                 Add
               </button>
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
-                className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 rounded-2xl transition-transform transform hover:scale-105"
+                className="flex-1 bg-gray-200 hover:bg-gray-300 
+                  dark:bg-gray-700 dark:hover:bg-gray-600 
+                  text-gray-800 dark:text-gray-200 
+                  font-semibold py-3 rounded-2xl 
+                  transition-transform transform hover:scale-105"
               >
                 Cancel
               </button>

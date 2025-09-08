@@ -1,3 +1,4 @@
+// src/components/CategoryPieChart.jsx
 import {
   PieChart,
   Pie,
@@ -20,8 +21,8 @@ const COLORS = [
 
 const CategoryPieChart = ({ data }) => {
   return (
-    <div className="bg-gray-100 shadow-lg rounded-2xl p-6 w-full">
-      <h2 className="text-xl font-bold text-gray-800 mb-4">
+    <div className="bg-gray-100 dark:bg-gray-800 shadow-lg rounded-2xl p-6 w-full">
+      <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">
         Spending by Category
       </h2>
 
@@ -47,8 +48,18 @@ const CategoryPieChart = ({ data }) => {
               />
             ))}
           </Pie>
-          <Tooltip formatter={(value) => `₹${value}`} />
-          <Legend verticalAlign="bottom" height={36} />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "var(--tooltip-bg, white)",
+              color: "var(--tooltip-text, black)",
+            }}
+            formatter={(value) => `₹${value}`}
+          />
+          <Legend
+            verticalAlign="bottom"
+            height={36}
+            wrapperStyle={{ color: "currentColor" }}
+          />
         </PieChart>
       </ResponsiveContainer>
     </div>
