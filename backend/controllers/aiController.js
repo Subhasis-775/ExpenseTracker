@@ -1,4 +1,3 @@
-// backend/controllers/aiController.js
 import dotenv from "dotenv";
 import Expense from "../models/expenseModel.js";
 
@@ -7,7 +6,6 @@ dotenv.config();
 const GEMINI_API_URL =
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent";
 
-// --- Helper function for Gemini API ---
 const callGemini = async (prompt) => {
   try {
     const controller = new AbortController();
@@ -38,7 +36,6 @@ const callGemini = async (prompt) => {
   }
 };
 
-// --- AI Chat Controller ---
 export const chatWithAI = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -46,17 +43,14 @@ export const chatWithAI = async (req, res) => {
 
     if (!message) return res.status(400).json({ message: "Message is required" });
 
-    // 🔹 Fetch all expenses for this user
     const expenses = await Expense.find({ userId }).lean();
 
-    // 🔹 Summarize expenses
     const totalSpent = expenses.reduce((sum, exp) => sum + exp.amount, 0);
     const byCategory = expenses.reduce((acc, exp) => {
       acc[exp.category] = (acc[exp.category] || 0) + exp.amount;
       return acc;
     }, {});
 
-    // 🔹 Updated AI prompt for clean, chat-like responses
     const prompt = `
 You are a friendly and helpful financial assistant.
 Answer the user's question in plain, conversational language.
