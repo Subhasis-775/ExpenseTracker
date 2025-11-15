@@ -1,5 +1,10 @@
-import API from "./api.js"
+import API from "./api.js";
 
-export const getRecurring=async()=>API.get('/recurring');
-export const addRecurring=async(recurringData)=>API.post('/recurring',recurringData);
-export const deleteRecurring=async(id)=>API.delete(`/recurring/${id}`);
+export const getRecurring = async () =>
+  API.get('/api/recurring');
+
+export const addRecurring = async (recurringData) =>
+  API.post('/api/recurring', recurringData);
+
+export const deleteRecurring = async (id) =>
+  API.delete(`/api/recurring/${id}`);

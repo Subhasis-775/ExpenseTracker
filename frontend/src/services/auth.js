@@ -1,3 +1,3 @@
 import API from "./api.js";
-export const register=(userdata)=>API.post('/auth/signup',userdata);
-export const login=(userdata)=>API.post('/auth/login',userdata);
+export const register = (userdata) => API.post('/api/auth/signup', userdata);
+export const login = (userdata) => API.post('/api/auth/login', userdata);

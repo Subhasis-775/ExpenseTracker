@@ -2,5 +2,5 @@
 import API from "./api.js";
 
 export const chatWithAI = (message) => {
-  return API.post("/ai/chat", { message });
+  return API.post("/api/ai/chat", { message });
 };
