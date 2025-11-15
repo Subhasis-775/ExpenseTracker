@@ -2,8 +2,19 @@
 import { useState, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { DarkModeContext } from "../context/DarkModeContext"; // ✅ Import Dark Mode Context
-import { Menu, X, LogOut, Sun, Moon } from "lucide-react"; // ✅ Icons
+import { DarkModeContext } from "../context/DarkModeContext";
+import { 
+  Menu, 
+  X, 
+  LogOut, 
+  Sun, 
+  Moon, 
+  Home, 
+  Repeat, 
+  User,
+  Settings,
+  ChevronDown
+} from "lucide-react";
 
 export default function Layout({ children }) {
   const { user, logoutUser } = useContext(AuthContext);
@@ -26,47 +37,52 @@ export default function Layout({ children }) {
       .slice(0, 2);
 
   return (
-    <div className="min-h-screen flex bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen flex bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/20 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-all duration-500">
       {/* Sidebar */}
       <aside
-        className={`fixed md:static top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-md p-4 transform transition-transform duration-300 z-40
+        className={`fixed md:static top-0 left-0 h-full w-72 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-r border-gray-200/50 dark:border-gray-700/50 shadow-soft p-6 transform transition-all duration-300 z-40
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
       >
-        {/* ✅ Branding */}
-        <div className="flex items-center space-x-3 mb-8">
-          <div className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-600 text-white font-bold text-xl shadow">
+        {/* Enhanced Branding */}
+        <div className="flex items-center space-x-3 mb-10 animate-fade-in">
+          <div className="w-12 h-12 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white font-bold text-xl shadow-glow">
             ₹
           </div>
-          <span className="text-xl font-extrabold text-gray-800 dark:text-gray-100">
-            Expense <span className="text-blue-600">Tracker</span>
-          </span>
+          <div>
+            <span className="text-xl font-extrabold text-gray-800 dark:text-gray-100">
+              Expense <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-600">Tracker</span>
+            </span>
+            <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">Smart Finance Management</p>
+          </div>
         </div>
 
-        {/* ✅ Nav links */}
-        <nav className="space-y-2">
+        {/* Enhanced Nav links */}
+        <nav className="space-y-3 animate-slide-up">
           <NavLink
             to="/dashboard"
             className={({ isActive }) =>
-              `block px-4 py-2 rounded-lg transition ${
+              `group flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                 isActive
-                  ? "bg-blue-100 text-blue-600 font-medium"
-                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-glow transform scale-105"
+                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-100/80 dark:hover:bg-gray-700/80 hover:transform hover:scale-105"
               }`
             }
           >
-            Dashboard
+            <Home size={20} className={`${sidebarOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200`} />
+            <span className="font-medium">Dashboard</span>
           </NavLink>
           <NavLink
             to="/recurring"
             className={({ isActive }) =>
-              `block px-4 py-2 rounded-lg transition ${
+              `group flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                 isActive
-                  ? "bg-blue-100 text-blue-600 font-medium"
-                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-glow transform scale-105"
+                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-100/80 dark:hover:bg-gray-700/80 hover:transform hover:scale-105"
               }`
             }
           >
-            Recurring Manager
+            <Repeat size={20} className={`${sidebarOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200`} />
+            <span className="font-medium">Recurring Manager</span>
           </NavLink>
         </nav>
       </aside>
@@ -81,58 +97,75 @@ export default function Layout({ children }) {
 
       {/* Main content area */}
       <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <header className="sticky top-0 bg-white dark:bg-gray-800 shadow-md z-20 flex items-center justify-between px-4 py-3">
+        {/* Enhanced Header */}
+        <header className="sticky top-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 shadow-soft z-20 flex items-center justify-between px-6 py-4">
           {/* Sidebar toggle on mobile */}
           <button
-            className="md:hidden text-gray-600 dark:text-gray-200"
+            className="md:hidden text-gray-600 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >
             {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
-          <h1 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-            Expense Tracker
-          </h1>
-
-          {/* ✅ Right Section: Dark mode + Avatar */}
           <div className="flex items-center space-x-3">
+            <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">
+              Expense Tracker
+            </h1>
+            <div className="hidden sm:block w-1 h-6 bg-gradient-to-b from-blue-400 to-blue-600 rounded-full"></div>
+            <p className="hidden sm:block text-sm text-gray-500 dark:text-gray-400 font-medium">
+              Welcome back, {user?.name?.split(' ')[0] || 'User'}!
+            </p>
+          </div>
+
+          {/* Enhanced Right Section: Dark mode + Avatar */}
+          <div className="flex items-center space-x-4">
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleDarkMode}
-              className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 shadow"
+              className="group p-3 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 hover:text-blue-600 dark:hover:text-blue-400 shadow-soft transition-all duration-200 hover:shadow-glow"
             >
-              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+              {darkMode ? <Sun size={20} className="group-hover:animate-bounce-subtle" /> : <Moon size={20} className="group-hover:animate-bounce-subtle" />}
             </button>
 
-            {/* Avatar with dropdown */}
+            {/* Enhanced Avatar with dropdown */}
             <div className="relative">
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-500 text-white font-semibold shadow"
+                className="group flex items-center space-x-2 px-3 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold shadow-glow hover:shadow-glow transition-all duration-200 hover:scale-105"
               >
-                {getInitials(user?.name || user?.email || "U")}
+                <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center text-sm font-bold">
+                  {getInitials(user?.name || user?.email || "U")}
+                </div>
+                <ChevronDown size={16} className={`transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''}`} />
               </button>
+              
               {userMenuOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-lg shadow-md z-50">
+                <div className="absolute right-0 mt-3 w-48 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-xl shadow-strong z-50 animate-scale-in">
+                  {/* User Info */}
+                  <div className="px-4 py-3 border-b border-gray-200/50 dark:border-gray-700/50">
+                    <p className="font-semibold text-gray-800 dark:text-gray-100">{user?.name || 'User'}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{user?.email}</p>
+                  </div>
+                  
                   {/* Profile button */}
                   <button
                     onClick={() => {
                       setUserMenuOpen(false);
                       navigate("/profile");
                     }}
-                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                    className="flex items-center w-full px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100/80 dark:hover:bg-gray-700/80 transition-colors"
                   >
-                    👤 Profile
+                    <User size={16} className="mr-3" />
+                    Profile Settings
                   </button>
 
                   {/* Logout button */}
                   <button
                     onClick={handleLogout}
-                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                    className="flex items-center w-full px-4 py-3 text-sm text-danger-600 dark:text-danger-400 hover:bg-danger-50 dark:hover:bg-danger-900/20 transition-colors"
                   >
-                    <LogOut size={16} className="mr-2" />
-                    Logout
+                    <LogOut size={16} className="mr-3" />
+                    Sign Out
                   </button>
                 </div>
               )}
@@ -140,9 +173,11 @@ export default function Layout({ children }) {
           </div>
         </header>
 
-        {/* ✅ Centered Content */}
-        <main className="flex-1 max-w-7xl mx-auto w-full p-4 md:p-6 lg:p-8">
-          {children}
+        {/* Enhanced Content Area */}
+        <main className="flex-1 max-w-7xl mx-auto w-full p-6 md:p-8 lg:p-10 animate-fade-in">
+          <div className="min-h-[calc(100vh-8rem)]">
+            {children}
+          </div>
         </main>
       </div>
     </div>
