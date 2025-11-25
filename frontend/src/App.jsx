@@ -9,6 +9,7 @@ import RecurringManager from "./pages/RecurringManager.jsx";
 import Profile from "./pages/Profile.jsx"; // ✅ new import
 import PaymentPage from "./pages/PaymentPage.jsx"; // ✅ payment page
 import { Toaster } from "react-hot-toast"; // ✅ toaster
+import HomePage from "./pages/HomePage.jsx";
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -20,10 +21,7 @@ function App() {
 
       <Routes>
         {/* Default route */}
-        <Route
-          path="/"
-          element={user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
-        />
+        <Route path="/" element={<HomePage />} />
 
         {/* Auth routes */}
         <Route

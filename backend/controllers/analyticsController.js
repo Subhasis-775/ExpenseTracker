@@ -1,9 +1,10 @@
+import mongoose from 'mongoose';
 import Expense from '../models/expenseModel.js';
 
 // Get weekly spending trends (last 8 weeks)
 export const getWeeklyTrends = async (req, res) => {
   try {
-    const userId = req.user.id || req.user._id;
+    const userId = new mongoose.Types.ObjectId(req.user.id || req.user._id);
     
     // Get date 8 weeks ago
     const eightWeeksAgo = new Date();
@@ -59,7 +60,7 @@ export const getWeeklyTrends = async (req, res) => {
 // Get category comparison (current month vs previous month)
 export const getCategoryComparison = async (req, res) => {
   try {
-    const userId = req.user.id || req.user._id;
+    const userId = new mongoose.Types.ObjectId(req.user.id || req.user._id);
 
     // Get current month start
     const now = new Date();
@@ -132,7 +133,7 @@ export const getCategoryComparison = async (req, res) => {
 // Get monthly comparison (last 6 months)
 export const getMonthlyComparison = async (req, res) => {
   try {
-    const userId = req.user.id || req.user._id;
+    const userId = new mongoose.Types.ObjectId(req.user.id || req.user._id);
     
     // Get date 6 months ago
     const sixMonthsAgo = new Date();
