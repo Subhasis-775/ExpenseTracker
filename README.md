@@ -1,200 +1,362 @@
-# 💰 ExpenseTracker Pro
+# 💰 ExpenseTracker Pro - AI-Powered Finance Manager
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Node](https://img.shields.io/badge/node-%3E%3D%2016.0.0-brightgreen)
-![React](https://img.shields.io/badge/react-%5E18.2.0-blue)
-![MongoDB](https://img.shields.io/badge/mongodb-atlas-green)
+<div align="center">
 
-**A production-grade, full-stack personal finance management application featuring AI-powered insights, secure payments, and advanced analytics.**
+![ExpenseTracker Banner](https://img.shields.io/badge/ExpenseTracker-Pro-2563eb?style=for-the-badge&logo=wallet&logoColor=white)
+
+**A production-grade personal finance application built with the MERN stack, featuring AI insights, secure payments, and automated reporting.**
+
+[![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Express.js](https://img.shields.io/badge/Express.js-000000?style=flat&logo=express&logoColor=white)](https://expressjs.com/)
+[![React](https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-4285F4?style=flat&logo=google&logoColor=white)](https://ai.google.dev/)
+[![Razorpay](https://img.shields.io/badge/Razorpay-0C2444?style=flat&logo=razorpay&logoColor=white)](https://razorpay.com/)
+
+[Features](#-features) • [Demo](#-demo) • [Installation](#-installation) • [Tech Stack](#-tech-stack) • [Architecture](#-architecture) • [API Documentation](#-api-documentation)
+
+</div>
+
+---
+
+## 📋 Table of Contents
+
+- [Overview](#-overview)
+- [Features](#-features)
+- [Demo](#-demo)
+- [Tech Stack](#-tech-stack)
+- [Architecture](#-architecture)
+- [Installation](#-installation)
+- [Environment Variables](#-environment-variables)
+- [API Documentation](#-api-documentation)
+- [Project Structure](#-project-structure)
+- [Key Highlights](#-key-highlights)
+- [Future Enhancements](#-future-enhancements)
+- [Contributing](#-contributing)
+- [License](#-license)
 
 ---
 
 ## 🌟 Overview
 
-ExpenseTracker Pro is not just another expense logger. It's a comprehensive financial companion designed to help users take control of their money. Built with a modern tech stack (MERN), it leverages **Google Gemini AI** for smart financial advice, **Razorpay** for seamless bill payments, and **Nodemailer** for automated email reports.
+**ExpenseTracker Pro** is a comprehensive full-stack application designed to modernize personal finance management. Unlike traditional trackers, it leverages **Google Gemini AI** to provide smart spending insights, integrates **Razorpay** for direct bill payments, and uses **Nodemailer** for automated weekly/monthly email reports.
 
-The application features a stunning **Glassmorphism UI**, fully responsive design, and a robust backend ensuring security and scalability.
-
----
-
-## ✨ Key Features
-
-### 🎨 Modern UI/UX
-- **Glassmorphism Design:** Premium aesthetic with translucent cards and vibrant gradients.
-- **Dark Mode:** Fully integrated dark theme for comfortable night usage.
-- **Responsive Layout:** Seamless experience across Desktop, Tablet, and Mobile.
-- **Interactive Animations:** Smooth transitions and micro-interactions using CSS animations.
-
-### 🤖 AI-Powered Intelligence
-- **Smart Categorization:** AI automatically suggests categories for your expenses.
-- **Financial Advisor Chat:** Chat with our AI assistant to get personalized financial advice.
-- **Spending Insights:** AI analyzes your spending patterns to identify savings opportunities.
-
-### 📊 Advanced Analytics
-- **Interactive Charts:** Visualize spending with Pie Charts, Bar Graphs, and Line Charts (Recharts).
-- **Weekly Trends:** Track your spending habits week-over-week.
-- **Category Breakdown:** Deep dive into where your money goes.
-- **PDF Reports:** Generate professional monthly expense reports with a single click.
-
-### 💳 Payments & Recurring
-- **Razorpay Integration:** Securely pay bills directly from the dashboard.
-- **Recurring Manager:** Automate fixed expenses like Rent, Netflix, and Gym memberships.
-- **Payment History:** Keep a detailed log of all your transactions.
-
-### 📧 Notifications
-- **Email Alerts:** Get notified about successful payments and recurring expense reminders.
-- **Monthly Summaries:** Automated email summaries of your financial health.
+The application features a stunning **Glassmorphism UI** with dark mode support, ensuring a premium user experience across all devices.
 
 ---
 
-## 🛠️ Tech Stack
+## ✨ Features
+
+### � Core Features
+- **Smart Expense Tracking** - Add, edit, and categorize expenses with ease
+- **Recurring Manager** - Automate fixed expenses like subscriptions and rent
+- **Secure Payments** - Integrated Razorpay gateway for real-time bill payments
+- **AI Financial Advisor** - Chat with Gemini AI for personalized financial advice
+- **Automated Reports** - PDF generation and email summaries via Nodemailer
+
+### 🎨 UI/UX Features
+- **Glassmorphism Design** - Modern, translucent aesthetics with vibrant gradients
+- **Dark/Light Mode** - Seamless theme switching with persistent state
+- **Interactive Charts** - Visual analytics using Recharts (Pie, Bar, Line charts)
+- **Responsive Layout** - Mobile-first design using Tailwind CSS
+- **Micro-interactions** - Smooth animations for buttons, cards, and transitions
+- **Toast Notifications** - Real-time feedback for all user actions
+
+### � Security Features
+- JWT token-based authentication
+- Password hashing with bcrypt
+- Protected API routes
+- Secure environment variable management
+- Razorpay signature verification
+
+---
+
+## 🎬 Demo
+
+### Screenshots
+
+#### Dashboard (Dark Mode)
+![Dashboard](https://github.com/user-attachments/assets/placeholder-dashboard-dark)
+
+#### AI Chat Interface
+![AI Chat](https://github.com/user-attachments/assets/placeholder-ai-chat)
+
+#### Payment Gateway
+![Payments](https://github.com/user-attachments/assets/placeholder-payments)
+
+### Live Demo
+🔗 [Live Demo Link](https://expense-tracker-pro-demo.vercel.app/)
+
+---
+
+## 🛠 Tech Stack
 
 ### Frontend
-- **Framework:** React.js (Vite)
-- **Styling:** Tailwind CSS, Custom CSS (Glassmorphism)
-- **State Management:** React Context API
-- **Routing:** React Router DOM
-- **Charts:** Recharts
-- **Icons:** Lucide React
-- **Notifications:** React Hot Toast
+- **React 18** - UI library with Hooks
+- **Vite** - Next-generation build tool
+- **Tailwind CSS** - Utility-first CSS framework
+- **Recharts** - Composable charting library
+- **Lucide React** - Beautiful & consistent icons
+- **Axios** - HTTP client
+- **React Hot Toast** - Notifications
 
 ### Backend
-- **Runtime:** Node.js
-- **Framework:** Express.js
-- **Database:** MongoDB (Mongoose ODM)
-- **Authentication:** JWT (JSON Web Tokens) & Bcrypt
-- **AI Engine:** Google Gemini API
-- **Payments:** Razorpay API
-- **Email:** Nodemailer (Gmail SMTP)
-- **Scheduling:** Node-cron
-- **PDF Generation:** PDFKit
+- **Node.js** - Runtime environment
+- **Express.js** - Web framework
+- **MongoDB** - NoSQL Database
+- **Mongoose** - ODM for MongoDB
+- **JWT** - Authentication
+- **Bcrypt** - Password hashing
+- **Nodemailer** - Email services
+- **Node-cron** - Task scheduling
+- **PDFKit** - PDF generation
+
+### Integrations
+- **Google Gemini AI** - Intelligent financial insights
+- **Razorpay** - Payment gateway
 
 ---
 
-## 🚀 Getting Started
+## 🏗 Architecture
 
-Follow these steps to set up the project locally.
+```
+┌─────────────────┐         ┌─────────────────┐         ┌─────────────────┐
+│                 │         │                 │         │                 │
+│  React Client   │◄───────►│  Express Server │◄───────►│    MongoDB      │
+│  (Frontend)     │         │   (Backend)     │         │   (Database)    │
+│                 │         │                 │         │                 │
+└────────┬────────┘         └────────┬────────┘         └─────────────────┘
+         │                           │
+         │ REST API                  │
+         │                           │
+         │                  ┌────────▼────────┐
+         │                  │   Third Party   │
+         │                  │    Services     │
+         │                  └────────┬────────┘
+         │                           │
+         │              ┌────────────┼────────────┐
+         │              │            │            │
+  ┌──────▼──────┐  ┌────▼─────┐  ┌───▼────┐  ┌────▼─────┐
+  │   Gemini    │  │ Razorpay │  │ Gmail  │  │  PDFKit  │
+  │     AI      │  │ Payments │  │  SMTP  │  │  Engine  │
+  └─────────────┘  └──────────┘  └────────┘  └──────────┘
+```
+
+### Data Flow
+1. **User Auth** - Secure login/signup with JWT issuance.
+2. **Expense Entry** - User adds expense -> Stored in MongoDB.
+3. **AI Analysis** - User asks question -> Backend queries Gemini -> Returns insight.
+4. **Payment Processing** - User initiates pay -> Razorpay Order -> Verification -> Expense Created.
+5. **Reporting** - Cron job triggers -> Aggregates data -> Generates PDF -> Sends Email.
+
+---
+
+## 📦 Installation
 
 ### Prerequisites
 - Node.js (v16+)
 - MongoDB Atlas Account
 - Razorpay Account
 - Google Gemini API Key
-- Gmail Account (for App Password)
+- Gmail Account (App Password)
 
-### 1. Clone the Repository
+### Clone Repository
 ```bash
 git clone https://github.com/yourusername/expense-tracker-pro.git
 cd expense-tracker-pro
 ```
 
-### 2. Backend Setup
-Navigate to the backend directory and install dependencies:
+### Backend Setup
 ```bash
 cd backend
 npm install
 ```
 
-Create a `.env` file in the `backend` directory:
+Create `.env` file in backend directory:
 ```env
 PORT=5000
 MONGO_URL=your_mongodb_connection_string
-JWT_SECRET=your_super_secret_jwt_key
-
-# AI Configuration
-GEMINI_API_KEY=your_google_gemini_api_key
-
-# Payment Configuration
+JWT_SECRET=your_jwt_secret
+GEMINI_API_KEY=your_gemini_api_key
 RAZORPAY_KEY_ID=your_razorpay_key_id
 RAZORPAY_KEY_SECRET=your_razorpay_key_secret
-
-# Email Configuration
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASSWORD=your_gmail_app_password
 ```
 
-Start the backend server:
+Start backend server:
 ```bash
 npm run dev
 ```
 
-### 3. Frontend Setup
-Navigate to the frontend directory and install dependencies:
+### Frontend Setup
 ```bash
-cd ../frontend
+cd frontend
 npm install
 ```
 
-Create a `.env` file in the `frontend` directory:
+Create `.env` file in frontend directory:
 ```env
 VITE_API_URL=http://localhost:5000
 VITE_RAZORPAY_KEY_ID=your_razorpay_key_id
 ```
 
-Start the frontend development server:
+Start frontend:
 ```bash
 npm run dev
 ```
 
-Visit `http://localhost:5173` in your browser.
+---
+
+## 🔐 Environment Variables
+
+### Backend (.env)
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `MONGO_URL` | MongoDB connection string | `mongodb+srv://...` |
+| `JWT_SECRET` | Secret for token signing | `mysecretkey123` |
+| `GEMINI_API_KEY` | Google AI API Key | `AIzaSy...` |
+| `RAZORPAY_KEY_ID` | Payment Gateway ID | `rzp_test_...` |
+| `EMAIL_USER` | Gmail address for alerts | `user@gmail.com` |
+| `EMAIL_PASSWORD` | Gmail App Password | `abcd efgh ijkl mnop` |
 
 ---
 
-## � API Documentation
+## 📚 API Documentation
 
 ### Authentication
-- `POST /api/auth/register` - Register a new user
-- `POST /api/auth/login` - Login user
+
+#### Register
+```http
+POST /api/auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "securepassword"
+}
+```
+
+#### Login
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "securepassword"
+}
+```
 
 ### Expenses
-- `GET /api/expenses` - Get all expenses (supports filtering)
-- `POST /api/expenses` - Add a new expense
-- `DELETE /api/expenses/:id` - Delete an expense
 
-### Analytics
-- `GET /api/analytics/weekly` - Get weekly spending trends
-- `GET /api/analytics/category-comparison` - Compare spending across categories
-- `GET /api/analytics/monthly-comparison` - Monthly spending comparison
+#### Get All Expenses
+```http
+GET /api/expenses?category=Food&sort=date
+Authorization: Bearer <token>
+```
 
-### Reports
-- `GET /api/reports` - Generate PDF report
+#### Add Expense
+```http
+POST /api/expenses
+Authorization: Bearer <token>
+Content-Type: application/json
 
-### AI
-- `POST /api/ai/chat` - Chat with AI financial assistant
+{
+  "title": "Grocery",
+  "amount": 500,
+  "category": "Food",
+  "date": "2023-10-25"
+}
+```
+
+### Analytics & AI
+
+#### Get Weekly Trends
+```http
+GET /api/analytics/weekly
+Authorization: Bearer <token>
+```
+
+#### Chat with AI
+```http
+POST /api/ai/chat
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "message": "How can I save more on food?"
+}
+```
 
 ---
 
-## � Project Structure
+## 📁 Project Structure
 
 ```
 expense-tracker-pro/
 ├── backend/
-│   ├── config/         # DB, Email, Payment configs
-│   ├── controllers/    # Request handlers
-│   ├── middleware/     # Auth, Error handling
-│   ├── models/         # Mongoose schemas
-│   ├── routes/         # API routes
-│   ├── utils/          # Helper functions (Email templates)
-│   └── index.js        # Entry point
+│   ├── config/           # DB & Service configs
+│   ├── controllers/      # Logic for Auth, Expenses, AI
+│   ├── middleware/       # Auth verification
+│   ├── models/           # Mongoose Schemas
+│   ├── routes/           # API Endpoints
+│   ├── utils/            # Email templates, PDF generator
+│   └── index.js          # Server entry
 │
-└── frontend/
-    ├── src/
-    │   ├── components/ # Reusable components (Cards, Charts)
-    │   ├── context/    # Global state (Auth, DarkMode)
-    │   ├── pages/      # Main pages (Dashboard, Login)
-    │   ├── services/   # API calls
-    │   └── index.css   # Global styles & Tailwind
-    └── vite.config.js
+├── frontend/
+│   ├── src/
+│   │   ├── components/   # Reusable UI components
+│   │   ├── context/      # Global state (Auth, Theme)
+│   │   ├── pages/        # Dashboard, Login, Payments
+│   │   ├── services/     # Axios API calls
+│   │   └── index.css     # Tailwind & Custom styles
+│   └── vite.config.js
+│
+└── README.md
 ```
+
+---
+
+## 🎯 Key Highlights
+
+### 1. **AI-Driven Insights**
+- Integrated Google Gemini to analyze spending patterns.
+- Provides actionable advice (e.g., "You spent 20% more on dining out this week").
+
+### 2. **Automated Financials**
+- **Recurring Manager**: Automatically creates expenses for subscriptions.
+- **Email Reports**: Weekly summaries sent directly to your inbox.
+
+### 3. **Seamless Payments**
+- Full Razorpay integration allowing users to pay bills without leaving the app.
+- Automatic transaction logging upon payment success.
+
+### 4. **Visual Analytics**
+- Comprehensive dashboard with real-time charts.
+- Compare monthly spending and track category-wise distribution.
+
+---
+
+## 🚀 Future Enhancements
+
+- [ ] **Budget Goals** - Set monthly limits for categories
+- [ ] **Multi-currency** - Support for USD, EUR, etc.
+- [ ] **Receipt Scanning** - OCR to extract data from bills
+- [ ] **Export to Excel** - CSV/Excel data export
+- [ ] **Social Login** - Google/GitHub authentication
+- [ ] **PWA Support** - Installable mobile app
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please follow these steps:
 
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
@@ -209,11 +371,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Author
 
-**Subhasis**
-
-- [GitHub](https://github.com/yourusername)
-- [LinkedIn](https://linkedin.com/in/yourusername)
+**Subhasis Rout**
+- GitHub: [Subhasis-775](https://github.com/Subhasis-775)
+- LinkedIn: [Subhasis Rout](https://linkedin.com/in/subhasis-rout)
+- Email: subhasisrout00@gmail.com
 
 ---
 
-*Built with ❤️ for better financial health.*
+<div align="center">
+
+**⭐ Star this repository if you found it helpful!**
+
+Made with ❤️ by [Subhasis](https://github.com/Subhasis-775)
+
+</div>
