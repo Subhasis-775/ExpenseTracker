@@ -7,6 +7,7 @@ import { Login } from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import RecurringManager from "./pages/RecurringManager.jsx"; 
 import Profile from "./pages/Profile.jsx"; // ✅ new import
+import PaymentPage from "./pages/PaymentPage.jsx"; // ✅ payment page
 import { Toaster } from "react-hot-toast"; // ✅ toaster
 
 function App() {
@@ -46,6 +47,10 @@ function App() {
         <Route
           path="/profile"
           element={user ? <Profile /> : <Navigate to="/login" />} // ✅ added profile
+        />
+        <Route
+          path="/payments"
+          element={user ? <PaymentPage /> : <Navigate to="/login" />} // ✅ added payments
         />
 
         {/* Catch-all redirect */}

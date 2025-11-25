@@ -13,8 +13,11 @@ import {
   Repeat, 
   User,
   Settings,
-  ChevronDown
+  ChevronDown,
+  CreditCard
 } from "lucide-react";
+
+import NotificationBell from "./NotificationBell.jsx";
 
 export default function Layout({ children }) {
   const { user, logoutUser } = useContext(AuthContext);
@@ -84,6 +87,19 @@ export default function Layout({ children }) {
             <Repeat size={20} className={`${sidebarOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200`} />
             <span className="font-medium">Recurring Manager</span>
           </NavLink>
+          <NavLink
+            to="/payments"
+            className={({ isActive }) =>
+              `group flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                isActive
+                  ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-glow transform scale-105"
+                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-100/80 dark:hover:bg-gray-700/80 hover:transform hover:scale-105"
+              }`
+            }
+          >
+            <CreditCard size={20} className={`${sidebarOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200`} />
+            <span className="font-medium">Payments</span>
+          </NavLink>
         </nav>
       </aside>
 
@@ -119,6 +135,9 @@ export default function Layout({ children }) {
 
           {/* Enhanced Right Section: Dark mode + Avatar */}
           <div className="flex items-center space-x-4">
+            {/* Notification Bell */}
+            <NotificationBell />
+
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleDarkMode}

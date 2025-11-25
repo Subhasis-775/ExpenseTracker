@@ -5,6 +5,9 @@ import ExpenseList from "../components/ExpenseList.jsx";
 import ExpenseFilter from "../components/ExpenseFilter.jsx";
 import CategoryPieChart from "../components/charts/CategoryPieChart.jsx";
 import MonthlyBarChart from "../components/charts/MonthlyBarChart.jsx";
+import WeeklyLineChart from "../components/charts/WeeklyLineChart.jsx";
+import CategoryStackedBarChart from "../components/charts/CategoryStackedBarChart.jsx";
+import UpcomingExpenses from "../components/UpcomingExpenses.jsx";
 import downloadReport from "../services/report.js";
 import {
   Wallet,
@@ -17,6 +20,7 @@ import {
 import { toast } from "react-hot-toast";
 import Layout from "../components/Layout.jsx";
 import AIChatBox from "../components/AIChatBox.jsx";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -254,6 +258,30 @@ const Dashboard = () => {
           </div>
         </div>
 
+        {/* Make Payment Button */}
+        <Link to="/payments" className="block">
+          <div className="group bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 shadow-glow hover:shadow-glow-success rounded-2xl p-6 transition-all duration-300 hover:scale-105 animate-slide-up cursor-pointer">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                  <CreditCard className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white mb-1">
+                    Make a Payment
+                  </h3>
+                  <p className="text-white/90 text-sm">
+                    Quick and secure bill payments
+                  </p>
+                </div>
+              </div>
+              <div className="text-white text-2xl group-hover:animate-bounce-subtle">
+                →
+              </div>
+            </div>
+          </div>
+        </Link>
+
         {/* Enhanced PDF Report */}
         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-soft rounded-2xl p-6 animate-slide-up">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
@@ -312,6 +340,10 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Enhanced Add Expense Form */}
           <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-soft rounded-2xl p-8 animate-slide-up">
+            
+            {/* Upcoming Expenses Widget */}
+            <UpcomingExpenses />
+
             <div className="text-center mb-8">
               <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-glow">
                 <CreditCard className="w-8 h-8 text-white" />
@@ -471,6 +503,16 @@ const Dashboard = () => {
               </h2>
             </div>
             <MonthlyBarChart data={monthlyData} />
+          </div>
+        </div>
+
+        {/* Advanced Analytics Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-soft rounded-2xl p-6 animate-fade-in">
+            <WeeklyLineChart />
+          </div>
+          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-soft rounded-2xl p-6 animate-fade-in">
+            <CategoryStackedBarChart />
           </div>
         </div>
 

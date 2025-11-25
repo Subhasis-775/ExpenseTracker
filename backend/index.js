@@ -10,6 +10,13 @@ import recurringRoutes from './routes/recurringRoutes.js';
 import reportsRoute from './routes/reportsRoute.js';
 import { processRecurring } from './controllers/recurringControl.js';
 import aiRoutes from './routes/aiRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
+import analyticsRoutes from './routes/analyticsRoutes.js';
+import { 
+  sendWeeklySummary, 
+  sendMonthlySummary, 
+  checkUpcomingRecurring 
+} from './controllers/notificationController.js';
 
 // Load .env explicitly from the same folder where index.js is
 dotenv.config();
@@ -30,11 +37,33 @@ app.use('/api/expenses', expenseRoutes);
 app.use('/api/recurring', recurringRoutes);
 app.use('/api/reports', reportsRoute);
 app.use('/api/ai', aiRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
-// Cron Job
+// Cron Jobs
+
+// Process Recurring Expenses (Daily at midnight)
 cron.schedule("0 0 * * *", async () => {
-    console.log("Running recurring expenses cron job");
-    await processRecurring();
+  console.log("Running Recurring Expense Job...");
+  await processRecurring();
+});
+
+// Weekly Summary (Every Monday at 9 AM)
+cron.schedule("0 9 * * 1", async () => {
+  console.log("Running Weekly Summary Job...");
+  await sendWeeklySummary();
+});
+
+// Monthly Summary (1st of every month at 9 AM)
+cron.schedule("0 9 1 * *", async () => {
+  console.log("Running Monthly Summary Job...");
+  await sendMonthlySummary();
+});
+
+// Upcoming Expense Alerts (Daily at 9 AM)
+cron.schedule("0 9 * * *", async () => {
+  console.log("Checking for upcoming expenses...");
+  await checkUpcomingRecurring();
 });
 
 const port = process.env.PORT || 5000;
