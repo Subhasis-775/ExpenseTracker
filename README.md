@@ -104,7 +104,7 @@ The application features a stunning **Glassmorphism UI** with dark mode support,
 <img width="1891" height="862" alt="image" src="https://github.com/user-attachments/assets/b08cc275-6c6d-4e52-92f4-73f654d2dd76" />
 
 ### Live Demo
-🔗 [Live Demo Link](https://expensetracker-s1ar.onrender.com/)
+🔗 https://expense-tracker-flame-gamma-90.vercel.app/
 
 ---
 
