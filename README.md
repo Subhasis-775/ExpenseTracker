@@ -77,13 +77,13 @@ The application features a stunning **Glassmorphism UI** with dark mode support,
 ### Screenshots
 
 #### Dashboard (Dark Mode)
-(<img width="1889" height="865" alt="image" src="https://github.com/user-attachments/assets/2ff3c8a9-d0ac-467e-bc8c-bba12b5b0b56" />)
+<img width="1889" height="865" alt="image" src="https://github.com/user-attachments/assets/2ff3c8a9-d0ac-467e-bc8c-bba12b5b0b56" />
 <img width="1856" height="841" alt="image" src="https://github.com/user-attachments/assets/086e9c51-83d6-4c40-ace2-f37a0e68ab32" />
 <img width="1738" height="744" alt="image" src="https://github.com/user-attachments/assets/253847ce-e41c-44da-8c4a-37cf0018db6d" />
 <img width="1719" height="783" alt="image" src="https://github.com/user-attachments/assets/7d30583b-6899-4345-9951-5ba354919120" />
 
 #### AI Chat Interface
-(<img width="494" height="691" alt="image" src="https://github.com/user-attachments/assets/0735079e-3105-49ef-b888-31993180e186" />)
+<img width="494" height="691" alt="image" src="https://github.com/user-attachments/assets/0735079e-3105-49ef-b888-31993180e186" />
 
 #### Recurring Expense Page
 <img width="1845" height="770" alt="image" src="https://github.com/user-attachments/assets/83eb2e36-30eb-4c6d-9612-c191def95363" />
@@ -91,14 +91,17 @@ The application features a stunning **Glassmorphism UI** with dark mode support,
 
 #### Payment Gateway
 <img width="966" height="750" alt="image" src="https://github.com/user-attachments/assets/9dc56d38-9ffd-4904-b982-93d6573fe0c4" />
-(<img width="1409" height="823" alt="image" src="https://github.com/user-attachments/assets/c4ea2bc9-1f68-4ec8-a880-2a8946aa3a09" />)
+<img width="1409" height="823" alt="image" src="https://github.com/user-attachments/assets/c4ea2bc9-1f68-4ec8-a880-2a8946aa3a09" />
 
 #### Email Service
-(https://github.com/user-attachments/assets/daede66a-5915-4034-849b-a8dce4f1649b)
+![WhatsApp Image 2025-11-25 at 5 21 18 PM](https://github.com/user-attachments/assets/b72182fe-35e0-49d2-bb94-6d4268fb9f55)
+
 
 #### PDF Report
 ![Screenshot_2025-11-25-17-38-13-55_e2d5b3f32b79de1d45acd1fad96fbb0f](https://github.com/user-attachments/assets/e13c7d0b-1f7d-44eb-ae26-9626fe227a01)
 
+#### Profile
+<img width="1891" height="862" alt="image" src="https://github.com/user-attachments/assets/b08cc275-6c6d-4e52-92f4-73f654d2dd76" />
 
 ### Live Demo
 🔗 [Live Demo Link](https://expensetracker-s1ar.onrender.com/)
