@@ -138,36 +138,17 @@ The application features a stunning **Glassmorphism UI** with dark mode support,
 
 ### Key Pages
 
-#### 📊 Dashboard (Dark Mode)
-- Real-time expense overview
-- Interactive charts
-- This Month Summary Card
-- Smart Budget Alerts
-- Quick action buttons
+#### Dashboard (Dark Mode)
+![Dashboard](https://github.com/user-attachments/assets/placeholder-dashboard-dark)
 
-#### 🤖 AI Chat Interface
-- Natural language queries
-- Contextual financial advice
-- Spending pattern analysis
-- Save money recommendations
+#### AI Chat Interface
+![AI Chat](https://github.com/user-attachments/assets/placeholder-ai-chat)
 
-#### 💳 Payment Gateway
-- Razorpay integration
-- Bill payments
-- Premium subscription
-- Group settlement
+#### Payment Gateway
+![Payments](https://github.com/user-attachments/assets/placeholder-payments)
 
-#### 🏆 Profile & Achievements
-- User statistics
-- Achievement badges
-- Account type display
-- Recent activity timeline
-
-#### 👥 Split Bills
-- Group management
-- Expense sharing
-- Balance calculation
-- Integrated payment settlement
+### Live Demo
+🔗 [Live Demo Link](https://expense-tracker-pro-demo.vercel.app/)
 
 ---
 
