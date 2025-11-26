@@ -12,6 +12,8 @@ import { processRecurring } from './controllers/recurringControl.js';
 import aiRoutes from './routes/aiRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import analyticsRoutes from './routes/analyticsRoutes.js';
+import budgetRoutes from './routes/budgetRoutes.js';
+import groupRoutes from './routes/groupRoutes.js'; // ✅ Group Routes
 import { 
   sendWeeklySummary, 
   sendMonthlySummary, 
@@ -39,6 +41,8 @@ app.use('/api/reports', reportsRoute);
 app.use('/api/ai', aiRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/budgets', budgetRoutes);
+app.use('/api/groups', groupRoutes); // ✅ Group Routes
 
 // Cron Jobs
 

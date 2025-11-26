@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { addExpense, getExpenses } from "../services/expenses.js";
+import { addExpense, getExpenses, categorizeExpense } from "../services/expenses.js";
 import { AuthContext } from "../context/AuthContext";
 import ExpenseList from "../components/ExpenseList.jsx";
 import ExpenseFilter from "../components/ExpenseFilter.jsx";
@@ -17,12 +17,15 @@ import {
   FileDown,
   MessageSquare,
   HelpCircle,
-  ArrowRight
+  ArrowRight,
+  Sparkles
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import Layout from "../components/Layout.jsx";
 import AIChatBox from "../components/AIChatBox.jsx";
 import { Link } from "react-router-dom";
+import ReceiptScanner from "../components/ReceiptScanner.jsx";
+import BudgetAlerts from "../components/BudgetAlerts.jsx";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -38,6 +41,7 @@ const Dashboard = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
 
   const [filters, setFilters] = useState({
     category: "",
@@ -141,6 +145,39 @@ const Dashboard = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleTitleBlur = async () => {
+    if (!formData.title || formData.category) return; // Don't run if empty or category already set
+
+    setAiLoading(true);
+    try {
+      const res = await categorizeExpense({ title: formData.title });
+      if (res.data && res.data.category && res.data.category !== 'Other') {
+        setFormData(prev => ({ ...prev, category: res.data.category }));
+        toast.success(`🤖 AI suggested: ${res.data.category}`, {
+            icon: '✨',
+            style: {
+                borderRadius: '10px',
+                background: '#333',
+                color: '#fff',
+            },
+        });
+      }
+    } catch (error) {
+      console.error("Auto-categorization failed", error);
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const handleScanComplete = (data) => {
+    setFormData(prev => ({
+      ...prev,
+      title: data.title || prev.title,
+      amount: data.amount || prev.amount,
+      date: data.date || prev.date
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -212,6 +249,146 @@ const Dashboard = () => {
             delay="0.3s"
           />
         </div>
+
+        {/* Enhanced This Month Summary Card */}
+        <div className="glass-card p-8 rounded-3xl animate-slide-up bg-gradient-to-br from-white/90 to-blue-50/50 dark:from-gray-800/90 dark:to-gray-800/50 border-2 border-blue-200/50 dark:border-blue-700/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.01]" style={{animationDelay: '0.4s'}}>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
+                <BarChart2 className="w-7 h-7 text-white" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">This Month Summary</h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Total Spent This Month */}
+            <div className="bg-white/80 dark:bg-gray-700/50 p-5 rounded-2xl border border-gray-200/50 dark:border-gray-600/50 hover:shadow-md transition-all">
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Total Spent</p>
+              <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">₹{summary.monthly.toLocaleString()}</p>
+            </div>
+
+            {/* Comparison with Last Month */}
+            <div className="bg-white/80 dark:bg-gray-700/50 p-5 rounded-2xl border border-gray-200/50 dark:border-gray-600/50 hover:shadow-md transition-all">
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">vs Last Month</p>
+              {(() => {
+                const lastMonth = new Date();
+                lastMonth.setMonth(lastMonth.getMonth() - 1);
+                const lastMonthExpenses = expensesData.expenses
+                  .filter(e => new Date(e.date).getMonth() === lastMonth.getMonth())
+                  .reduce((sum, e) => sum + Number(e.amount), 0);
+                
+                const difference = summary.monthly - lastMonthExpenses;
+                const percentChange = lastMonthExpenses > 0 ? ((difference / lastMonthExpenses) * 100).toFixed(1) : 0;
+                const isIncrease = difference > 0;
+                
+                return (
+                  <div className="flex items-center gap-2">
+                    <p className={`text-3xl font-bold ${isIncrease ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>
+                      {isIncrease ? '↑' : '↓'} {Math.abs(percentChange)}%
+                    </p>
+                    {isIncrease && <span className="text-xs text-red-600 dark:text-red-400 font-medium">Higher</span>}
+                    {!isIncrease && lastMonthExpenses > 0 && <span className="text-xs text-green-600 dark:text-green-400 font-medium">Lower</span>}
+                  </div>
+                );
+              })()}
+            </div>
+
+            {/* Top Spending Category */}
+            <div className="bg-white/80 dark:bg-gray-700/50 p-5 rounded-2xl border border-gray-200/50 dark:border-gray-600/50 hover:shadow-md transition-all">
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Top Category</p>
+              {(() => {
+                const thisMonthExpenses = expensesData.expenses.filter(
+                  e => new Date(e.date).getMonth() === new Date().getMonth()
+                );
+                const categoryTotals = thisMonthExpenses.reduce((acc, e) => {
+                  acc[e.category] = (acc[e.category] || 0) + Number(e.amount);
+                  return acc;
+                }, {});
+                const topCategory = Object.entries(categoryTotals).sort((a, b) => b[1] - a[1])[0];
+                
+                return topCategory ? (
+                  <div>
+                    <p className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-1">{topCategory[0]}</p>
+                    <p className="text-sm text-purple-600 dark:text-purple-400 font-semibold">₹{topCategory[1].toLocaleString()}</p>
+                  </div>
+                ) : (
+                  <p className="text-gray-400 dark:text-gray-500">No data</p>
+                );
+              })()}
+            </div>
+
+            {/* Daily Average */}
+            <div className="bg-white/80 dark:bg-gray-700/50 p-5 rounded-2xl border border-gray-200/50 dark:border-gray-600/50 hover:shadow-md transition-all">
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Daily Average</p>
+              {(() => {
+                const today = new Date().getDate();
+                const dailyAvg = today > 0 ? (summary.monthly / today).toFixed(0) : 0;
+                
+                return (
+                  <div>
+                    <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">₹{Number(dailyAvg).toLocaleString()}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{today} days tracked</p>
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+
+          {/* Quick Insights */}
+          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-start gap-3">
+              <Sparkles className="w-5 h-5 text-yellow-500 mt-1 flex-shrink-0" />
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Quick Insights</p>
+                {(() => {
+                  const lastMonth = new Date();
+                  lastMonth.setMonth(lastMonth.getMonth() - 1);
+                  const lastMonthExpenses = expensesData.expenses
+                    .filter(e => new Date(e.date).getMonth() === lastMonth.getMonth())
+                    .reduce((sum, e) => sum + Number(e.amount), 0);
+                  
+                  const difference = summary.monthly - lastMonthExpenses;
+                  const isIncrease = difference > 0;
+                  
+                  const thisMonthExpenses = expensesData.expenses.filter(
+                    e => new Date(e.date).getMonth() === new Date().getMonth()
+                  );
+                  const categoryTotals = thisMonthExpenses.reduce((acc, e) => {
+                    acc[e.category] = (acc[e.category] || 0) + Number(e.amount);
+                    return acc;
+                  }, {});
+                  const topCategory = Object.entries(categoryTotals).sort((a, b) => b[1] - a[1])[0];
+                  const topCategoryPercent = topCategory && summary.monthly > 0 
+                    ? ((topCategory[1] / summary.monthly) * 100).toFixed(0) 
+                    : 0;
+
+                  return (
+                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                      {isIncrease 
+                        ? `You've spent ₹${Math.abs(difference).toLocaleString()} more than last month. `
+                        : lastMonthExpenses > 0 
+                          ? `Great job! You've saved ₹${Math.abs(difference).toLocaleString()} compared to last month. `
+                          : "This is your first month tracking. "}
+                      {topCategory && (
+                        <>
+                          Your top category is <strong className="text-gray-800 dark:text-gray-200">{topCategory[0]}</strong> ({topCategoryPercent}% of total spending).
+                          {topCategoryPercent > 40 && " Consider reviewing this category to optimize your budget."}
+                        </>
+                      )}
+                    </p>
+                  );
+                })()}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Smart Budget Alerts */}
+        <BudgetAlerts />
 
         {/* Make Payment Button */}
         <Link to="/payments" className="block">
@@ -291,6 +468,8 @@ const Dashboard = () => {
               <p className="text-gray-500 dark:text-gray-400">Track your spending easily</p>
             </div>
 
+            <ReceiptScanner onScanComplete={handleScanComplete} />
+
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Expense Title</label>
@@ -303,10 +482,16 @@ const Dashboard = () => {
                     name="title"
                     value={formData.title}
                     onChange={handleChange}
+                    onBlur={handleTitleBlur}
                     placeholder="e.g., Grocery Shopping"
                     className="input-field pl-10"
                     required
                   />
+                  {aiLoading && (
+                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                        <Sparkles className="w-4 h-4 text-yellow-500 animate-pulse" />
+                    </div>
+                  )}
                 </div>
               </div>
               

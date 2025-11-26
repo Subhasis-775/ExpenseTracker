@@ -3,26 +3,20 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const createTransporter = async () => {
-  try {
-    // Using Gmail App Password (simpler and more reliable than OAuth2)
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-    });
+// Create the transporter object
+export const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
 
-    // Verify connection
-    await transporter.verify();
-    console.log('✅ Email transporter is ready');
-    
-    return transporter;
-  } catch (error) {
+// Verify connection (optional but good for debugging)
+transporter.verify((error, success) => {
+  if (error) {
     console.error('❌ Email configuration error:', error.message);
-    return null;
+  } else {
+    console.log('✅ Email transporter is ready');
   }
-};
-
-export default createTransporter;
+});

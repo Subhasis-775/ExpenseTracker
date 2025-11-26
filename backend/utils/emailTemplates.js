@@ -249,3 +249,92 @@ export const getRecurringAlertTemplate = (
     </html>
   `;
 };
+
+/**
+ * Budget Alert Email Template
+ * @param {string} userName - User's name
+ * @param {string} category - Budget category
+ * @param {number} budgetAmount - Total budget amount
+ * @param {number} spentAmount - Amount spent so far
+ * @param {number} percentage - Percentage of budget used
+ * @returns {string} HTML email template
+ */
+export const getBudgetAlertTemplate = (
+  userName,
+  category,
+  budgetAmount,
+  spentAmount,
+  percentage
+) => {
+  const isExceeded = percentage >= 100;
+  const color = isExceeded ? "#dc3545" : "#ffc107"; // Red for exceeded, Yellow for warning
+  const title = isExceeded ? "🚨 Budget Exceeded Alert" : "⚠️ Budget Warning Alert";
+  const message = isExceeded 
+    ? `You have exceeded your budget for <strong>${category}</strong>.`
+    : `You have used <strong>${percentage.toFixed(0)}%</strong> of your budget for <strong>${category}</strong>.`;
+
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>${title}</title>
+    </head>
+    <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f5f5;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px;">
+        <tr>
+          <td align="center">
+            <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+              <tr>
+                <td style="background: ${color}; padding: 30px; border-radius: 8px 8px 0 0; text-align: center;">
+                  <h1 style="margin: 0; color: #ffffff; font-size: 28px;">${title}</h1>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 30px;">
+                  <p style="margin: 0 0 20px 0; font-size: 16px; color: #333;">Hi <strong>${userName}</strong>,</p>
+                  <p style="margin: 0 0 30px 0; font-size: 16px; color: #666;">${message}</p>
+                  
+                  <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="padding-bottom: 10px; color: #666;">Category</td>
+                        <td style="padding-bottom: 10px; text-align: right; font-weight: bold;">${category}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding-bottom: 10px; color: #666;">Budget Limit</td>
+                        <td style="padding-bottom: 10px; text-align: right; font-weight: bold;">₹${budgetAmount.toFixed(2)}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding-bottom: 10px; color: #666;">Spent So Far</td>
+                        <td style="padding-bottom: 10px; text-align: right; font-weight: bold; color: ${color};">₹${spentAmount.toFixed(2)}</td>
+                      </tr>
+                    </table>
+                    
+                    <div style="margin-top: 15px; background-color: #e9ecef; height: 10px; border-radius: 5px; overflow: hidden;">
+                      <div style="width: ${Math.min(percentage, 100)}%; height: 100%; background-color: ${color};"></div>
+                    </div>
+                    <p style="text-align: right; font-size: 12px; color: #666; margin-top: 5px;">${percentage.toFixed(1)}% Used</p>
+                  </div>
+
+                  <div style="margin-top: 30px; padding: 20px; background-color: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 16px; color: #856404;">💡 Tip</h3>
+                    <p style="margin: 0; font-size: 14px; color: #856404;">Check your dashboard to see detailed spending analysis and adjust your habits if needed.</p>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="background-color: #f8f9fa; padding: 20px; border-radius: 0 0 8px 8px; text-align: center;">
+                  <p style="margin: 0; font-size: 14px; color: #666;">Manage your budget wisely! 💰</p>
+                  <p style="margin: 10px 0 0 0; font-size: 12px; color: #999;">© ${new Date().getFullYear()} Expense Tracker. All rights reserved.</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
+  `;
+};

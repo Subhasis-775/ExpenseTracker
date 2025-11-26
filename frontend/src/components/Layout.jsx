@@ -14,7 +14,10 @@ import {
   User,
   Settings,
   ChevronDown,
-  CreditCard
+  CreditCard,
+  Wallet,
+  Users,
+  Crown
 } from "lucide-react";
 
 import NotificationBell from "./NotificationBell.jsx";
@@ -88,6 +91,32 @@ export default function Layout({ children }) {
             <span className="font-medium">Recurring Manager</span>
           </NavLink>
           <NavLink
+            to="/budgets"
+            className={({ isActive }) =>
+              `group flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                isActive
+                  ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-glow transform scale-105"
+                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-100/80 dark:hover:bg-gray-700/80 hover:transform hover:scale-105"
+              }`
+            }
+          >
+            <Wallet size={20} className={`${sidebarOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200`} />
+            <span className="font-medium">Budgets</span>
+          </NavLink>
+          <NavLink
+            to="/groups"
+            className={({ isActive }) =>
+              `group flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                isActive
+                  ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-glow transform scale-105"
+                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-100/80 dark:hover:bg-gray-700/80 hover:transform hover:scale-105"
+              }`
+            }
+          >
+            <Users size={20} className={`${sidebarOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200`} />
+            <span className="font-medium">Split Bills</span>
+          </NavLink>
+          <NavLink
             to="/payments"
             className={({ isActive }) =>
               `group flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
@@ -99,6 +128,19 @@ export default function Layout({ children }) {
           >
             <CreditCard size={20} className={`${sidebarOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200`} />
             <span className="font-medium">Payments</span>
+          </NavLink>
+          <NavLink
+            to="/subscription"
+            className={({ isActive }) =>
+              `group flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                isActive
+                  ? "bg-gradient-to-r from-yellow-500 to-yellow-600 text-white shadow-glow transform scale-105"
+                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-100/80 dark:hover:bg-gray-700/80 hover:transform hover:scale-105"
+              }`
+            }
+          >
+            <Crown size={20} className={`${sidebarOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200`} />
+            <span className="font-medium">Go Pro</span>
           </NavLink>
         </nav>
       </aside>

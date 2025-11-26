@@ -41,7 +41,7 @@ const paymentSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: ['Food', 'Travel', 'Shopping', 'Entertainment', 'Bills', 'Utilities', 'Healthcare', 'Education', 'Other'],
+    enum: ['Food', 'Travel', 'Shopping', 'Entertainment', 'Bills', 'Utilities', 'Healthcare', 'Education', 'Subscription', 'Other'],
   },
   notes: {
     type: Object,

@@ -2,8 +2,9 @@
 import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { ArrowLeft, User, Mail, Calendar, Shield ,Settings} from "lucide-react";
+import { ArrowLeft, User, Mail, Calendar, Shield, Settings, TrendingUp, Activity, Clock, Lock, Award, Star, Zap } from "lucide-react";
 import toast from "react-hot-toast";
+import API from "../services/api";
 
 export default function Profile() {
   const { user, logout } = useContext(AuthContext);
@@ -11,6 +12,35 @@ export default function Profile() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [badges, setBadges] = useState([
+    { name: "Budget Master", description: "Stayed under budget for 3 months", icon: <Award className="w-8 h-8 text-yellow-500" />, earned: false, color: "bg-yellow-100 dark:bg-yellow-900/30" },
+    { name: "Savings Star", description: "Saved ₹5000 this month", icon: <Star className="w-8 h-8 text-blue-500" />, earned: false, color: "bg-blue-100 dark:bg-blue-900/30" },
+    { name: "Early Bird", description: "Added expense before 9 AM", icon: <Zap className="w-8 h-8 text-purple-500" />, earned: false, color: "bg-gray-100 dark:bg-gray-700" },
+  ]);
+
+  useEffect(() => {
+    const fetchBadgesData = async () => {
+        try {
+            const { data: expenses } = await API.get('/api/expenses');
+            
+            const hasEarlyExpense = expenses.some(exp => {
+                const hour = new Date(exp.date).getHours();
+                return hour < 9;
+            });
+
+            setBadges(prev => prev.map(b => {
+                if (b.name === "Early Bird") return { ...b, earned: hasEarlyExpense, color: hasEarlyExpense ? "bg-purple-100 dark:bg-purple-900/30" : "bg-gray-100 dark:bg-gray-700" };
+                if (b.name === "Budget Master") return { ...b, earned: true }; 
+                if (b.name === "Savings Star") return { ...b, earned: true };
+                return b;
+            }));
+        } catch (err) {
+            console.error("Failed to fetch badge data", err);
+        }
+    };
+
+    if (user) fetchBadgesData();
+  }, [user]);
 
   useEffect(() => {
     if (!user) {
@@ -98,13 +128,91 @@ export default function Profile() {
           <ProfileCard
             icon={<Shield size={24} />}
             title="Account Type"
-            value="Standard"
+            value={user?.isPremium ? "Premium" : "Standard"}
             color="danger"
           />
         </div>
 
+        {/* Account Statistics & Activity */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Stats Column */}
+          <div className="lg:col-span-1 space-y-6">
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-3xl p-6 shadow-soft animate-slide-up" style={{animationDelay: '0.1s'}}>
+              <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center gap-2">
+                <TrendingUp className="text-blue-500" /> Account Stats
+              </h3>
+              
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-2xl">
+                  <span className="text-gray-600 dark:text-gray-300 font-medium">Total Logins</span>
+                  <span className="text-lg font-bold text-gray-800 dark:text-gray-100">24</span>
+                </div>
+                <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-2xl">
+                  <span className="text-gray-600 dark:text-gray-300 font-medium">Last Active</span>
+                  <span className="text-sm font-bold text-green-600 dark:text-green-400">Just now</span>
+                </div>
+                <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-2xl">
+                  <span className="text-gray-600 dark:text-gray-300 font-medium">Status</span>
+                  <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full text-xs font-bold uppercase tracking-wide">Active</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Recent Activity Column */}
+          <div className="lg:col-span-2">
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-3xl p-6 shadow-soft h-full animate-slide-up" style={{animationDelay: '0.2s'}}>
+              <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center gap-2">
+                <Activity className="text-purple-500" /> Recent Activity
+              </h3>
+              
+              <div className="space-y-6">
+                {[
+                  { action: "Logged in from new device", time: "Just now", icon: Shield, color: "text-blue-500", bg: "bg-blue-100 dark:bg-blue-900/30" },
+                  { action: "Updated profile information", time: "2 days ago", icon: User, color: "text-green-500", bg: "bg-green-100 dark:bg-green-900/30" },
+                  { action: "Password changed", time: "1 week ago", icon: Lock, color: "text-yellow-500", bg: "bg-yellow-100 dark:bg-yellow-900/30" },
+                ].map((item, index) => (
+                  <div key={index} className="flex items-center gap-4 p-3 hover:bg-gray-50 dark:hover:bg-gray-700/30 rounded-2xl transition-colors group">
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${item.bg} ${item.color} shadow-sm group-hover:scale-110 transition-transform duration-300`}>
+                      <item.icon size={20} />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-gray-800 dark:text-gray-100">{item.action}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1 mt-1">
+                        <Clock size={12} /> {item.time}
+                      </p>
+                    </div>
+                    <div className="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          </div>
+
+        {/* Badges Section */}
+        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-3xl p-8 shadow-soft animate-slide-up" style={{animationDelay: '0.3s'}}>
+            <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center gap-2">
+                <Award className="text-yellow-500" /> Achievements
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {badges.map((badge, index) => (
+                    <div key={index} className={`relative p-6 rounded-2xl border ${badge.earned ? 'border-transparent bg-white dark:bg-gray-800 shadow-md' : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 opacity-70'} flex items-center gap-4 transition-all duration-300 hover:scale-105`}>
+                        <div className={`w-16 h-16 rounded-full flex items-center justify-center ${badge.color} ${badge.earned ? 'shadow-glow' : ''}`}>
+                            {badge.icon}
+                        </div>
+                        <div>
+                            <h4 className="font-bold text-gray-800 dark:text-gray-100">{badge.name}</h4>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{badge.description}</p>
+                            {badge.earned && <span className="inline-block mt-2 px-2 py-0.5 bg-green-100 text-green-600 text-xs rounded-full font-bold">Earned</span>}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+
         {/* Enhanced Actions */}
-        <div className="flex flex-col sm:flex-row justify-end gap-4">
+        <div className="flex flex-col sm:flex-row justify-end gap-4 pb-8">
           <button className="group flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl shadow-glow hover:shadow-glow transition-all duration-200 hover:scale-105">
             <Settings className="w-5 h-5 group-hover:animate-bounce-subtle" />
             <span className="font-semibold">Edit Profile</span>

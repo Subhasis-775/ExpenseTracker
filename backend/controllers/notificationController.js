@@ -1,7 +1,7 @@
 import User from '../models/user.js';
 import Expense from '../models/expenseModel.js';
 import Recurring from '../models/recurringModel.js';
-import createTransporter from '../config/emailConfig.js';
+import { transporter } from '../config/emailConfig.js'; // Updated import
 import {
   getWeeklySummaryTemplate,
   getMonthlySummaryTemplate,
@@ -11,7 +11,7 @@ import {
 // Send Weekly Summary (Last 7 days)
 export const sendWeeklySummary = async () => {
   console.log('Starting weekly summary email job...');
-  const transporter = await createTransporter();
+  // const transporter = await createTransporter(); // Removed
   if (!transporter) return;
 
   try {
@@ -67,7 +67,7 @@ export const sendWeeklySummary = async () => {
 // Send Monthly Summary (Last Month)
 export const sendMonthlySummary = async () => {
   console.log('Starting monthly summary email job...');
-  const transporter = await createTransporter();
+  // const transporter = await createTransporter(); // Removed
   if (!transporter) return;
 
   try {
@@ -122,7 +122,7 @@ export const sendMonthlySummary = async () => {
 // Check for upcoming recurring expenses (Due in 3 days)
 export const checkUpcomingRecurring = async () => {
   console.log('Checking for upcoming recurring expenses...');
-  const transporter = await createTransporter();
+  // const transporter = await createTransporter(); // Removed
   if (!transporter) return;
 
   try {

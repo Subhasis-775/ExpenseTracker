@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import User from '../models/user.js';
-import createTransporter from '../config/emailConfig.js';
+import { transporter } from '../config/emailConfig.js';
 import { getWelcomeEmailTemplate, getLoginNotificationTemplate } from '../utils/authEmailTemplates.js';
 
 // Register
@@ -67,7 +67,6 @@ export const login = async (req, res) => {
 // Helper function to send welcome email
 async function sendWelcomeEmail(userName, userEmail) {
     try {
-        const transporter = await createTransporter();
         if (!transporter) {
             console.log('Email transporter not available');
             return;
@@ -92,7 +91,6 @@ async function sendWelcomeEmail(userName, userEmail) {
 // Helper function to send login notification email
 async function sendLoginNotification(userName, userEmail, loginTime, ipAddress) {
     try {
-        const transporter = await createTransporter();
         if (!transporter) {
             console.log('Email transporter not available');
             return;
@@ -113,3 +111,20 @@ async function sendLoginNotification(userName, userEmail, loginTime, ipAddress) 
         throw error;
     }
 }
+
+// Upgrade to Premium
+export const upgradeToPremium = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        user.isPremium = true;
+        await user.save();
+
+        res.status(200).json({ success: true, message: "Upgraded to Premium!", isPremium: true });
+    } catch (error) {
+        console.error("Upgrade error:", error);
+        res.status(500).json({ message: error.message });
+    }
+};

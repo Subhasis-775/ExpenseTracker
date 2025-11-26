@@ -15,7 +15,8 @@ const callGemini = async (prompt) => {
 
   try {
     // Try models in order of preference
-    const models = ["gemini-1.5-pro", "gemini-1.5-flash-latest", "gemini-pro"];
+    // Updated model list based on available models
+    const models = ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-2.0-flash-exp", "gemini-flash-latest"];
     
     for (const modelName of models) {
       try {

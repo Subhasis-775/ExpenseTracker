@@ -13,3 +13,6 @@ export const updateExpense = (id, expenseData) =>
 
 export const deleteExpense = (id) =>
   API.delete(`/api/expenses/${id}`);
+
+export const categorizeExpense = (data) =>
+  API.post('/api/ai/categorize', data);
