@@ -6,14 +6,9 @@ import { Signup } from "./pages/Signup.jsx";
 import { Login } from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import RecurringManager from "./pages/RecurringManager.jsx"; 
-import Profile from "./pages/Profile.jsx";
-import PaymentPage from "./pages/PaymentPage.jsx";
-import BudgetPage from "./pages/BudgetPage.jsx";
-import SplitBillsPage from "./pages/SplitBillsPage.jsx"; // ✅ Split Bills
-import GroupDetailsPage from "./pages/GroupDetailsPage.jsx"; // ✅ Group Details
-import SubscriptionPage from "./pages/SubscriptionPage.jsx";
-import { Toaster } from "react-hot-toast";
-import HomePage from "./pages/HomePage.jsx";
+import Profile from "./pages/Profile.jsx"; // ✅ new import
+import PaymentPage from "./pages/PaymentPage.jsx"; // ✅ payment page
+import { Toaster } from "react-hot-toast"; // ✅ toaster
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -25,7 +20,10 @@ function App() {
 
       <Routes>
         {/* Default route */}
-        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/"
+          element={user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
+        />
 
         {/* Auth routes */}
         <Route
@@ -48,27 +46,11 @@ function App() {
         />
         <Route
           path="/profile"
-          element={user ? <Profile /> : <Navigate to="/login" />}
+          element={user ? <Profile /> : <Navigate to="/login" />} // ✅ added profile
         />
         <Route
           path="/payments"
-          element={user ? <PaymentPage /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/budgets"
-          element={user ? <BudgetPage /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/groups"
-          element={user ? <SplitBillsPage /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/groups/:id"
-          element={user ? <GroupDetailsPage /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/subscription"
-          element={user ? <SubscriptionPage /> : <Navigate to="/login" />}
+          element={user ? <PaymentPage /> : <Navigate to="/login" />} // ✅ added payments
         />
 
         {/* Catch-all redirect */}
