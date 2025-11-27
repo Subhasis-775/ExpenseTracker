@@ -11,7 +11,7 @@ import Profile from "./pages/Profile.jsx";
 import PaymentPage from "./pages/PaymentPage.jsx";
 import BudgetPage from "./pages/BudgetPage.jsx";
 import SplitBillsPage from "./pages/SplitBillsPage.jsx";
-import GroupDetailsPage from "./pages/GroupDetailsPage.jsx"; // ✅ Group details page
+import GroupDetailsPage from "./pages/GroupDetailsPage.jsx";
 import SubscriptionPage from "./pages/SubscriptionPage.jsx";
 import { Toaster } from "react-hot-toast";
 
@@ -59,19 +59,19 @@ function App() {
         />
         <Route
           path="/budgets"
-          element={user ? <BudgetPage /> : <Navigate to="/login" />} // ✅ Budget page
+          element={user ? <BudgetPage /> : <Navigate to="/login" />}
         />
         <Route
           path="/split-bills"
-          element={user ? <SplitBillsPage /> : <Navigate to="/login" />} // ✅ Split Bills page
+          element={user ? <SplitBillsPage /> : <Navigate to="/login" />}
         />
         <Route
           path="/groups/:id"
-          element={user ? <GroupDetailsPage /> : <Navigate to="/login" />} // ✅ Group details page
+          element={user ? <GroupDetailsPage /> : <Navigate to="/login" />}
         />
         <Route
           path="/subscription"
-          element={user ? <SubscriptionPage /> : <Navigate to="/login" />} // ✅ Go Pro page
+          element={user ? <SubscriptionPage /> : <Navigate to="/login" />}
         />
 
         {/* Catch-all redirect */}
