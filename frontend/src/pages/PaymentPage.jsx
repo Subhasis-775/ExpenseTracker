@@ -11,6 +11,7 @@ const PaymentPage = () => {
     amount: '',
     description: '',
     category: '',
+    paymentMethod: 'upi', // Default to UPI
   });
   const [loading, setLoading] = useState(false);
   const [refreshHistory, setRefreshHistory] = useState(0);
@@ -86,7 +87,7 @@ const PaymentPage = () => {
 
             if (verifyData.success) {
               toast.success('✅ Payment successful! Expense added automatically.');
-              setFormData({ amount: '', description: '', category: '' });
+              setFormData({ amount: '', description: '', category: '', paymentMethod: 'upi' });
               setRefreshHistory((prev) => prev + 1); // Trigger history refresh
             } else {
               toast.error('Payment verification failed');
@@ -165,6 +166,77 @@ const PaymentPage = () => {
               />
             </div>
 
+            {/* Payment Method Selector */}
+            <div className="space-y-3">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Payment Method *
+              </label>
+              <div className="grid grid-cols-3 gap-3">
+                {/* UPI Option */}
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, paymentMethod: 'upi' })}
+                  className={`p-4 rounded-xl border-2 transition-all duration-200 ${
+                    formData.paymentMethod === 'upi'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-700'
+                  }`}
+                >
+                  <div className="text-center">
+                    <div className={`text-2xl mb-1 ${formData.paymentMethod === 'upi' ? 'scale-110' : ''} transition-transform`}>💳</div>
+                    <div className={`text-sm font-semibold ${
+                      formData.paymentMethod === 'upi' 
+                        ? 'text-blue-600 dark:text-blue-400' 
+                        : 'text-gray-700 dark:text-gray-300'
+                    }`}>UPI</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Google Pay, PhonePe</div>
+                  </div>
+                </button>
+
+                {/* Card Option */}
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, paymentMethod: 'card' })}
+                  className={`p-4 rounded-xl border-2 transition-all duration-200 ${
+                    formData.paymentMethod === 'card'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-700'
+                  }`}
+                >
+                  <div className="text-center">
+                    <div className={`text-2xl mb-1 ${formData.paymentMethod === 'card' ? 'scale-110' : ''} transition-transform`}>💳</div>
+                    <div className={`text-sm font-semibold ${
+                      formData.paymentMethod === 'card' 
+                        ? 'text-blue-600 dark:text-blue-400' 
+                        : 'text-gray-700 dark:text-gray-300'
+                    }`}>Card</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Debit/Credit Card</div>
+                  </div>
+                </button>
+
+                {/* Netbanking Option */}
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, paymentMethod: 'netbanking' })}
+                  className={`p-4 rounded-xl border-2 transition-all duration-200 ${
+                    formData.paymentMethod === 'netbanking'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-700'
+                  }`}
+                >
+                  <div className="text-center">
+                    <div className={`text-2xl mb-1 ${formData.paymentMethod === 'netbanking' ? 'scale-110' : ''} transition-transform`}>🏦</div>
+                    <div className={`text-sm font-semibold ${
+                      formData.paymentMethod === 'netbanking' 
+                        ? 'text-blue-600 dark:text-blue-400' 
+                        : 'text-gray-700 dark:text-gray-300'
+                    }`}>Net Banking</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Bank Account</div>
+                  </div>
+                </button>
+              </div>
+            </div>
+
             {/* Description */}
             <div className="space-y-2">
               <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -222,7 +294,7 @@ const PaymentPage = () => {
               ) : (
                 <>
                   <CreditCard className="w-5 h-5 mr-2" />
-                  Pay Now
+                  Pay with {formData.paymentMethod === 'upi' ? 'UPI' : formData.paymentMethod === 'card' ? 'Card' : 'Net Banking'}
                 </>
               )}
             </button>

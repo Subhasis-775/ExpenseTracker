@@ -104,7 +104,7 @@ export default function Layout({ children }) {
             <span className="font-medium">Budgets</span>
           </NavLink>
           <NavLink
-            to="/groups"
+            to="/split-bills"
             className={({ isActive }) =>
               `group flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                 isActive

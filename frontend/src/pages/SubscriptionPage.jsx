@@ -45,8 +45,18 @@ const SubscriptionPage = () => {
                         toast.error("Upgrade failed after payment");
                     }
                 },
+                prefill: {
+                    name: user?.name || 'User',
+                    email: user?.email || 'user@example.com',
+                },
                 theme: {
                     color: "#F59E0B",
+                },
+                modal: {
+                    ondismiss: function () {
+                        setLoading(false);
+                        toast.error('Payment cancelled');
+                    },
                 },
             };
             

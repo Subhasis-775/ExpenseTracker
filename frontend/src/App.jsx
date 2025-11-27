@@ -2,6 +2,7 @@ import { Navigate, Routes, Route } from "react-router-dom";
 import { useContext } from "react";
 import "./App.css";
 import { AuthContext } from "./context/AuthContext";
+import HomePage from "./pages/HomePage.jsx";
 import { Signup } from "./pages/Signup.jsx";
 import { Login } from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
@@ -9,11 +10,10 @@ import RecurringManager from "./pages/RecurringManager.jsx";
 import Profile from "./pages/Profile.jsx";
 import PaymentPage from "./pages/PaymentPage.jsx";
 import BudgetPage from "./pages/BudgetPage.jsx";
-import SplitBillsPage from "./pages/SplitBillsPage.jsx"; // ✅ Split Bills
-import GroupDetailsPage from "./pages/GroupDetailsPage.jsx"; // ✅ Group Details
+import SplitBillsPage from "./pages/SplitBillsPage.jsx";
+import GroupDetailsPage from "./pages/GroupDetailsPage.jsx"; // ✅ Group details page
 import SubscriptionPage from "./pages/SubscriptionPage.jsx";
 import { Toaster } from "react-hot-toast";
-import HomePage from "./pages/HomePage.jsx";
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -24,8 +24,11 @@ function App() {
       <Toaster position="top-right" reverseOrder={false} />
 
       <Routes>
-        {/* Default route */}
-        <Route path="/" element={<HomePage />} />
+        {/* Default route - Home page for unauthenticated users */}
+        <Route
+          path="/"
+          element={user ? <Navigate to="/dashboard" /> : <HomePage />}
+        />
 
         {/* Auth routes */}
         <Route
@@ -56,19 +59,19 @@ function App() {
         />
         <Route
           path="/budgets"
-          element={user ? <BudgetPage /> : <Navigate to="/login" />}
+          element={user ? <BudgetPage /> : <Navigate to="/login" />} // ✅ Budget page
         />
         <Route
-          path="/groups"
-          element={user ? <SplitBillsPage /> : <Navigate to="/login" />}
+          path="/split-bills"
+          element={user ? <SplitBillsPage /> : <Navigate to="/login" />} // ✅ Split Bills page
         />
         <Route
           path="/groups/:id"
-          element={user ? <GroupDetailsPage /> : <Navigate to="/login" />}
+          element={user ? <GroupDetailsPage /> : <Navigate to="/login" />} // ✅ Group details page
         />
         <Route
           path="/subscription"
-          element={user ? <SubscriptionPage /> : <Navigate to="/login" />}
+          element={user ? <SubscriptionPage /> : <Navigate to="/login" />} // ✅ Go Pro page
         />
 
         {/* Catch-all redirect */}
