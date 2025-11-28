@@ -49,15 +49,17 @@ The application features a stunning **Glassmorphism UI** with dark mode support,
 ## ✨ Features
 
 ### 💎 Core Features
-- **Smart Expense Tracking** - Add, edit, and categorize expenses with auto-categorization using AI
+- **Smart Expense Tracking** - Add, edit, delete, and categorize expenses with auto-categorization using AI
 - **AI Auto-Categorization** - Gemini AI automatically suggests categories based on expense titles
-- **Recurring Manager** - Automate fixed expenses like subscriptions and rent
-- **Budget Management** - Set category-wise budgets with real-time tracking
-- **Smart Budget Alerts** - Get notified when approaching or exceeding budgets with predictions
+- **Recurring Manager** - Automate fixed expenses like subscriptions and rent with daily/weekly/monthly frequencies
+- **Budget Management** - Set category-wise budgets with real-time tracking and visual progress bars
+- **Smart Budget Alerts** - Get notified when approaching or exceeding budgets with predictive analytics
+- **Financial Goals & Savings** - Set savings goals with circular progress visualization, deadlines, and achievement badges
+- **Expense Activity Streak** - GitHub/LeetCode-style contribution calendar showing 12 weeks of spending patterns
 - **Split Bills** - Create groups for shared expenses with automatic balance calculation
 - **Settle Up** - Integrated Razorpay payment for settling group debts
-- **Secure Payments** - Razorpay gateway for real-time bill payments
-- **AI Financial Advisor** - Chat with Gemini 2.0 AI for personalized financial advice
+- **Secure Payments** - Razorpay gateway for real-time bill payments and premium subscriptions
+- **AI Financial Advisor** - Draggable chat interface with Markdown support and quick suggestion chips
 - **Automated Reports** - PDF generation and email summaries via Nodemailer
 
 ### 🎨 UI/UX Features
@@ -65,20 +67,48 @@ The application features a stunning **Glassmorphism UI** with dark mode support,
 - **Dark/Light Mode** - Seamless theme switching with persistent state
 - **Interactive Charts** - Visual analytics using Recharts (Pie, Bar, Line, Stacked charts)
 - **Responsive Layout** - Mobile-first design using Tailwind CSS
-- **Micro-interactions** - Smooth animations for buttons, cards, and transitions
+- **Framer Motion Animations** - Smooth transitions, draggable AI chat, and micro-interactions
 - **Toast Notifications** - Real-time feedback for all user actions
 - **This Month Summary Card** - Enhanced dashboard with month-over-month comparisons
 - **Upcoming Expenses** - Visual timeline of scheduled payments
 - **Receipt Scanner** - Upload and manage receipt images
+- **Notification Bell** - Real-time alerts for recurring payments due in next 3 days
 
 ### 🚀 Advanced Features
 
+#### **Financial Goals** 🎯
+- Set savings goals with target amounts
+- Track progress with beautiful circular visualizations (Recharts)
+- Categorize goals (Vacation, Electronics, Education, Emergency, Home, Vehicle)
+- Set optional deadlines with countdown
+- Achievement badges when goals are reached
+- Statistics dashboard (total saved, total target, overall progress)
+- Add/edit/delete goals with form validation
+
+#### **Expense Activity Streak** 📊
+- GitHub-style contribution calendar (12 weeks)
+- Green intensity levels based on spending amount
+- Hover tooltips showing date, expense count, and total
+- Modal popup accessible via header button
+- Dark mode support with visible grid squares
+- Legend showing intensity levels
+
+#### **AI Chat Assistant** 🤖
+- Draggable interface - move chat box anywhere on screen
+- Minimize/maximize functionality
+- Quick suggestion chips for common questions
+- Markdown support for formatted responses
+- Scroll effects with custom scrollbar
+- Mobile-friendly responsive design
+- Ask questions about spending patterns
+- Get personalized financial advice
+
 #### **Premium Subscription** 👑
 - Razorpay-powered subscription system
-- Unlock Pro features (unlimited groups, advanced AI reports)
+- Unlock Pro features (unlimited goals, groups, advanced AI reports)
 - ₹499/month pricing
 - Instant status updates
-- Test mode support
+- Test mode support with demo cards
 
 #### **Gamification** 🏆
 - **Achievement Badges** - Unlock badges for financial milestones
@@ -96,7 +126,7 @@ The application features a stunning **Glassmorphism UI** with dark mode support,
 - Real-time balance updates
 - Group expense history
 
-#### **Smart Dashboard Insights** 📊
+#### **Smart Dashboard Insights** �
 - **This Month Summary** showing:
   - Total spent this month
   - Month-over-month comparison (↑↓ percentage)
@@ -112,9 +142,10 @@ The application features a stunning **Glassmorphism UI** with dark mode support,
 ### 🤖 AI-Powered Features
 - **Auto-Categorization** - Uses Gemini 2.0 Flash to classify expenses
 - **Fallback System** - Keyword-based categorization when AI is unavailable
-- **Intelligent Chat** - Ask questions about spending patterns
+- **Intelligent Chat** - Ask questions about spending patterns with natural language
 - **Personalized Insights** - Get advice based on your financial data
 - **Predictive Analytics** - Budget forecasting and trend analysis
+- **Markdown Responses** - Properly formatted AI answers with lists, code blocks, and formatting
 
 ### 🔐 Security Features
 - JWT token-based authentication
@@ -126,7 +157,9 @@ The application features a stunning **Glassmorphism UI** with dark mode support,
 - Rate limiting on sensitive endpoints
 
 ### 📧 Notification Features
+- **Notification Bell** - Real-time alerts in header
 - Email notifications for budget alerts (80%, 100%)
+- Recurring payment reminders (3 days before due)
 - Weekly expense summaries
 - Monthly spending reports
 - Payment confirmations
@@ -158,10 +191,12 @@ The application features a stunning **Glassmorphism UI** with dark mode support,
 - **React 18** - UI library with Hooks and Context API
 - **Vite** - Next-generation build tool for faster development
 - **Tailwind CSS** - Utility-first CSS framework
-- **Recharts** - Composable charting library
-- **Lucide React** - Beautiful & consistent icons (200+ icons)
+- **Recharts** - Composable charting library for data visualization
+- **Framer Motion** - Production-ready animation library for React
+- **React Markdown** - Markdown rendering for AI responses
+- **Lucide React** - Beautiful & consistent icons (500+ icons)
 - **Axios** - HTTP client with interceptors
-- **React Hot Toast** - Elegant notifications
+- **React Hot Toast** - Elegant notifications and toasts
 - **React Router DOM v6** - Client-side routing
 
 ### Backend
@@ -615,6 +650,7 @@ ExpenseTracker/
 │   ├── models/
 │   │   ├── budgetModel.js           # Budget schema
 │   │   ├── expenseModel.js          # Expense schema
+│   │   ├── goalModel.js             # Goal schema 🆕
 │   │   ├── groupModel.js            # Group schema
 │   │   ├── paymentModel.js          # Payment schema
 │   │   ├── recurringModel.js        # Recurring schema
@@ -626,6 +662,7 @@ ExpenseTracker/
 │   │   ├── authRoutes.js            # /api/auth/*
 │   │   ├── budgetRoutes.js          # /api/budgets/*
 │   │   ├── expenseRoutes.js         # /api/expenses/*
+│   │   ├── goalRoutes.js            # /api/goals/* 🆕
 │   │   ├── groupRoutes.js           # /api/groups/*
 │   │   ├── paymentRoutes.js         # /api/payments/*
 │   │   ├── recurringRoutes.js       # /api/recurring/*
@@ -647,12 +684,15 @@ ExpenseTracker/
 │   │   │   │   ├── MonthlyBarChart.jsx
 │   │   │   │   ├── WeeklyLineChart.jsx
 │   │   │   │   └── CategoryStackedBarChart.jsx
-│   │   │   ├── AIChatBox.jsx        # AI chat interface
+│   │   │   ├── AIChatBox.jsx        # AI chat interface with drag/markdown 🆕
 │   │   │   ├── BudgetAlerts.jsx     # Smart budget alerts 🆕
 │   │   │   ├── ExpenseFilter.jsx    # Filter controls
 │   │   │   ├── ExpenseList.jsx      # Expense table
+│   │   │   ├── ExpenseStreak.jsx    # GitHub-style streak calendar 🆕
+│   │   │   ├── GoalCard.jsx         # Goal progress visualization 🆕
+│   │   │   ├── GoalForm.jsx         # Create/edit goals form 🆕
 │   │   │   ├── Layout.jsx           # Sidebar + Header
-│   │   │   ├── NotificationBell.jsx # Alerts dropdown
+│   │   │   ├── NotificationBell.jsx # Alerts dropdown 🆕
 │   │   │   ├── ReceiptScanner.jsx   # Upload receipts
 │   │   │   └── UpcomingExpenses.jsx # Timeline view
 │   │   ├── context/
@@ -663,19 +703,23 @@ ExpenseTracker/
 │   │   ├── pages/
 │   │   │   ├── BudgetPage.jsx       # Budget manager
 │   │   │   ├── Dashboard.jsx        # Main dashboard 🆕 Enhanced
+│   │   │   ├── GoalsPage.jsx        # Financial goals manager 🆕
 │   │   │   ├── GroupDetailsPage.jsx # Split bill details
 │   │   │   ├── Groups.jsx           # Group list
 │   │   │   ├── Login.jsx            # Login page
 │   │   │   ├── PaymentPage.jsx      # Payment gateway
 │   │   │   ├── Profile.jsx          # User profile + badges 🆕
-│   │   │   ├── RecurringManager.jsx # Recurring expenses
+│   │   │   ├── RecurringManager.jsx # Recurring expenses 🆕 Updated
 │   │   │   ├── Signup.jsx           # Registration
 │   │   │   └── SubscriptionPage.jsx # Premium upgrade 🆕
 │   │   ├── services/
+│   │   │   ├── ai.js                # AI API calls 🆕
 │   │   │   ├── api.js               # Axios instance
 │   │   │   ├── budget.js            # Budget API calls
 │   │   │   ├── expenses.js          # Expense API calls
+│   │   │   ├── goals.js             # Goals API calls 🆕
 │   │   │   ├── payment.js           # Payment API calls 🆕
+│   │   │   ├── recurring.js         # Recurring API calls 🆕
 │   │   │   └── report.js            # PDF download
 │   │   ├── App.jsx                  # Route definitions
 │   │   ├── index.css                # Tailwind + Custom animations
@@ -732,30 +776,40 @@ ExpenseTracker/
 
 ## 🚀 Future Enhancements
 
-### Planned Features
-- [x] **Budget Alerts** - Smart notifications ✅ **COMPLETED**
-- [x] **Premium Subscription** - Razorpay integration ✅ **COMPLETED**
-- [x] **Gamification** - Achievement badges ✅ **COMPLETED**
-- [x] **Split Bills** - Group expense sharing ✅ **COMPLETED**
-- [x] **This Month Summary** - Enhanced dashboard card ✅ **COMPLETED**
-- [ ] **Multi-currency** - Support for USD, EUR, GBP
-- [ ] **Receipt OCR** - Extract data from bill photos
-- [ ] **Export to Excel** - CSV/Excel data export with charts
-- [ ] **Social Login** - Google/GitHub OAuth integration
-- [ ] **PWA Support** - Installable mobile app
-- [ ] **Voice Input** - Add expenses via voice commands
-- [ ] **Income Tracking** - Track multiple income sources
-- [ ] **Financial Goals** - Set and track savings goals
+### Planned Features (Not Yet Implemented)
+
+#### High Priority 🔥
+- [ ] **Smart Insights Dashboard** - Spending trends, predictions, and intelligent insights
+- [ ] **Weekly Email Reports** - Automated spending summaries sent to inbox
+- [ ] **Export to Excel/CSV** - Download data with charts for offline analysis
+
+#### Data & Integration 📊
+- [ ] **Receipt OCR** - Auto-extract data from bill photos using AI
 - [ ] **Bank Integration** - Auto-import transactions (Plaid/Yodlee)
+- [ ] **Multi-currency Support** - USD, EUR, GBP with live exchange rates
+- [ ] **Income Tracking** - Track multiple income sources and salary
+
+#### User Experience 🎨
+- [ ] **PWA Support** - Install as mobile/desktop app
+- [ ] **Voice Input** - Add expenses via voice commands
+- [ ] **Social Login** - Google/GitHub OAuth integration
 - [ ] **Advanced Search** - Filter by amount range, date, multiple categories
+- [ ] **Bulk Actions** - Delete or categorize multiple expenses at once
+
+#### Enhanced Features ⚡
+- [ ] **Savings Challenges** - Gamified spending challenges (e.g., "No eating out for 7 days")
+- [ ] **SMS Auto-Import** - Parse bank SMS to auto-add expenses
+- [ ] **Custom Categories** - User-defined expense categories
+- [ ] **Expense Templates** - Quick entry for recurring patterns
+- [ ] **Offline Mode** - Track expenses without internet, sync later
 
 ### Enhancement Ideas
-- Dark theme variations (Nord, Dracula, etc.)
-- Customizable dashboard widgets
-- Expense templates for quick entry
+- Dark theme variations (Nord, Dracula, Solarized)
+- Customizable dashboard widgets with drag-and-drop
+- Financial health score (0-100)
 - Category icons for better visualization
-- Offline mode with sync
-- Bulk actions (delete, categorize multiple expenses)
+- Net worth tracking (assets - liabilities)
+- Debt management (loans, credit cards, EMIs)
 
 ---
 

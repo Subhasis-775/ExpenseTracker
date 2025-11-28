@@ -25,15 +25,24 @@ const NotificationBell = () => {
   const fetchNotifications = async () => {
     try {
       const response = await api.get('/api/recurring');
+      console.log('📋 Recurring expenses:', response.data);
+      
       // Filter for expenses due in the next 3 days
       const today = new Date();
+      today.setHours(0, 0, 0, 0);
       const threeDaysLater = new Date();
       threeDaysLater.setDate(today.getDate() + 3);
+      threeDaysLater.setHours(23, 59, 59, 999);
+
+      console.log('📅 Date range:', { today, threeDaysLater });
 
       const alerts = response.data
         .filter(item => {
           const dueDate = new Date(item.nextDue);
-          return dueDate >= today && dueDate <= threeDaysLater;
+          dueDate.setHours(0, 0, 0, 0);
+          const isInRange = dueDate >= today && dueDate <= threeDaysLater;
+          console.log(`💡 ${item.title}: ${dueDate.toLocaleDateString()} - In range: ${isInRange}`);
+          return isInRange;
         })
         .map(item => ({
           id: item._id,
@@ -43,6 +52,7 @@ const NotificationBell = () => {
           date: new Date(item.nextDue)
         }));
 
+      console.log('🔔 Notifications:', alerts);
       setNotifications(alerts);
       setHasUnread(alerts.length > 0);
     } catch (error) {

@@ -14,6 +14,7 @@ import { processRecurring } from './controllers/recurringControl.js';
 import aiRoutes from './routes/aiRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import analyticsRoutes from './routes/analyticsRoutes.js';
+import goalRoutes from './routes/goalRoutes.js';
 import { 
   sendWeeklySummary, 
   sendMonthlySummary, 
@@ -43,6 +44,7 @@ app.use('/api/groups', groupRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/goals', goalRoutes);
 
 // Cron Jobs
 

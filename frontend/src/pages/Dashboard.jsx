@@ -20,6 +20,7 @@ import {
   ArrowRight,
   Sparkles
 } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
 import Layout from "../components/Layout.jsx";
 import AIChatBox from "../components/AIChatBox.jsx";
@@ -660,12 +661,15 @@ const Dashboard = () => {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Need Help?</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Check our FAQ or contact support</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Ask our AI assistant anything</p>
               </div>
             </div>
-            <Link to="/" className="btn-secondary flex items-center gap-2">
-              View FAQs <ArrowRight className="w-4 h-4" />
-            </Link>
+            <button 
+              onClick={() => setShowChat(true)}
+              className="btn-secondary flex items-center gap-2"
+            >
+              Ask AI <ArrowRight className="w-4 h-4" />
+            </button>
           </div>
         </div>
 
@@ -679,7 +683,9 @@ const Dashboard = () => {
         </button>
 
         {/* AI Chat Box */}
-        {showChat && <AIChatBox onClose={() => setShowChat(false)} />}
+        <AnimatePresence>
+          {showChat && <AIChatBox onClose={() => setShowChat(false)} />}
+        </AnimatePresence>
       </div>
     </Layout>
   );

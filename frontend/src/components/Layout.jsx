@@ -17,16 +17,21 @@ import {
   CreditCard,
   Wallet,
   Users,
-  Crown
+  Crown,
+  Target
 } from "lucide-react";
 
 import NotificationBell from "./NotificationBell.jsx";
+import ExpenseStreak from "./ExpenseStreak.jsx";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function Layout({ children }) {
   const { user, logoutUser } = useContext(AuthContext);
   const { darkMode, toggleDarkMode } = useContext(DarkModeContext); // ✅ Dark mode state
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showStreak, setShowStreak] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   const handleLogout = () => {
@@ -102,6 +107,19 @@ export default function Layout({ children }) {
           >
             <Wallet size={20} className={`${sidebarOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200`} />
             <span className="font-medium">Budgets</span>
+          </NavLink>
+          <NavLink
+            to="/goals"
+            className={({ isActive }) =>
+              `group flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                isActive
+                  ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-glow transform scale-105"
+                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-100/80 dark:hover:bg-gray-700/80 hover:transform hover:scale-105"
+              }`
+            }
+          >
+            <Target size={20} className={`${sidebarOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200`} />
+            <span className="font-medium">Goals</span>
           </NavLink>
           <NavLink
             to="/split-bills"
@@ -180,6 +198,29 @@ export default function Layout({ children }) {
             {/* Notification Bell */}
             <NotificationBell />
 
+            {/* Streak Button */}
+            <button
+              onClick={() => setShowStreak(true)}
+              className="group p-3 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-soft transition-all duration-200 hover:shadow-glow relative"
+              title="View Expense Streak"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"
+                />
+              </svg>
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full border-2 border-white dark:border-gray-800"></div>
+            </button>
+
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleDarkMode}
@@ -247,6 +288,61 @@ export default function Layout({ children }) {
           </div>
         </main>
       </div>
+
+      {/* Expense Streak Modal */}
+      <AnimatePresence>
+        {showStreak && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            onClick={() => setShowStreak(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-4xl w-full shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      className="w-6 h-6 text-white"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"
+                      />
+                    </svg>
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                    Expense Activity Streak
+                  </h2>
+                </div>
+                <button
+                  onClick={() => setShowStreak(false)}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition"
+                >
+                  <X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                </button>
+              </div>
+              
+              <div className="overflow-x-auto">
+                <ExpenseStreak />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

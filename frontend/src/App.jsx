@@ -13,6 +13,7 @@ import BudgetPage from "./pages/BudgetPage.jsx";
 import SplitBillsPage from "./pages/SplitBillsPage.jsx";
 import GroupDetailsPage from "./pages/GroupDetailsPage.jsx";
 import SubscriptionPage from "./pages/SubscriptionPage.jsx";
+import GoalsPage from "./pages/GoalsPage.jsx";
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -72,6 +73,10 @@ function App() {
         <Route
           path="/subscription"
           element={user ? <SubscriptionPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/goals"
+          element={user ? <GoalsPage /> : <Navigate to="/login" />}
         />
 
         {/* Catch-all redirect */}

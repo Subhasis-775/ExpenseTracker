@@ -5,10 +5,16 @@ import { Plus, Trash2, Zap, BarChart2, HelpCircle, ArrowRight } from "lucide-rea
 import CategoryPieChart from "../components/charts/CategoryPieChart.jsx";
 import MonthlyBarChart from "../components/charts/MonthlyBarChart.jsx";
 import { Link } from "react-router-dom";
+import { getRecurring, addRecurring, deleteRecurring } from "../services/recurring.js";
 
 const RecurringManager = () => {
   const [recurringExpenses, setRecurringExpenses] = useState([]);
-  const [form, setForm] = useState({ category: "", amount: "", interval: "" });
+  const [form, setForm] = useState({ 
+    title: "", 
+    amount: "", 
+    frequency: "", 
+    nextDue: "" 
+  });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -16,25 +22,29 @@ const RecurringManager = () => {
   const [categoryData, setCategoryData] = useState([]);
   const [monthlyData, setMonthlyData] = useState([]);
 
+  // Fetch recurring expenses from backend
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      const dummyData = [
-        { id: 1, category: "Netflix", amount: 499, interval: "Monthly" },
-        { id: 2, category: "Gym", amount: 1200, interval: "Monthly" },
-        { id: 3, category: "Spotify", amount: 199, interval: "Monthly" },
-        { id: 4, category: "Amazon Prime", amount: 1499, interval: "Yearly" },
-      ];
-      setRecurringExpenses(dummyData);
-      setLoading(false);
-    }, 800);
+    fetchRecurringExpenses();
   }, []);
+
+  const fetchRecurringExpenses = async () => {
+    try {
+      setLoading(true);
+      const response = await getRecurring();
+      setRecurringExpenses(response.data || []);
+    } catch (err) {
+      console.error("Error fetching recurring expenses:", err);
+      toast.error("Failed to load recurring expenses");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     // Prepare Category Pie Chart data
     const catMap = {};
     recurringExpenses.forEach(exp => {
-      catMap[exp.category] = (catMap[exp.category] || 0) + Number(exp.amount);
+      catMap[exp.title] = (catMap[exp.title] || 0) + Number(exp.amount);
     });
     setCategoryData(Object.entries(catMap).map(([category, amount]) => ({ category, amount })));
 
@@ -42,8 +52,10 @@ const RecurringManager = () => {
     const monthMap = {};
     recurringExpenses.forEach(exp => {
       let months = [];
-      if (exp.interval === "Monthly") months = Array.from({ length: 12 }, (_, i) => i);
-      if (exp.interval === "Yearly") months = [new Date().getMonth()]; // for simplicity
+      if (exp.frequency === "monthly") months = Array.from({ length: 12 }, (_, i) => i);
+      if (exp.frequency === "weekly") months = Array.from({ length: 12 }, (_, i) => i);
+      if (exp.frequency === "daily") months = Array.from({ length: 12 }, (_, i) => i);
+      
       months.forEach(m => {
         const monthName = new Date(0, m).toLocaleString("default", { month: "short" });
         monthMap[monthName] = (monthMap[monthName] || 0) + Number(exp.amount);
@@ -52,22 +64,40 @@ const RecurringManager = () => {
     setMonthlyData(Object.entries(monthMap).map(([month, amount]) => ({ month, amount })));
   }, [recurringExpenses]);
 
-  const handleAdd = (e) => {
+  const handleAdd = async (e) => {
     e.preventDefault();
-    if (!form.category || !form.amount || !form.interval) {
+    if (!form.title || !form.amount || !form.frequency || !form.nextDue) {
       setError("All fields are required");
       return;
     }
-    const newExpense = { ...form, id: Date.now() };
-    setRecurringExpenses([...recurringExpenses, newExpense]);
-    setForm({ category: "", amount: "", interval: "" });
-    setError("");
-    toast.success("Recurring expense added ✅");
+
+    try {
+      await addRecurring({
+        title: form.title,
+        amount: Number(form.amount),
+        frequency: form.frequency,
+        nextDue: form.nextDue
+      });
+      
+      setForm({ title: "", amount: "", frequency: "", nextDue: "" });
+      setError("");
+      toast.success("Recurring expense added ✅");
+      fetchRecurringExpenses(); // Refresh the list
+    } catch (err) {
+      console.error("Error adding recurring expense:", err);
+      toast.error("Failed to add recurring expense");
+    }
   };
 
-  const handleDelete = (id) => {
-    setRecurringExpenses(recurringExpenses.filter(exp => exp.id !== id));
-    toast.success("Recurring expense deleted ❌");
+  const handleDelete = async (id) => {
+    try {
+      await deleteRecurring(id);
+      toast.success("Recurring expense deleted ❌");
+      fetchRecurringExpenses(); // Refresh the list
+    } catch (err) {
+      console.error("Error deleting recurring expense:", err);
+      toast.error("Failed to delete recurring expense");
+    }
   };
 
   return (
@@ -96,7 +126,7 @@ const RecurringManager = () => {
             Add New Subscription
           </h3>
           <form onSubmit={handleAdd} className="grid md:grid-cols-12 gap-6">
-            <div className="md:col-span-4 space-y-2">
+            <div className="md:col-span-3 space-y-2">
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Service Name</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -105,14 +135,15 @@ const RecurringManager = () => {
                 <input 
                   type="text" 
                   placeholder="e.g. Netflix" 
-                  value={form.category} 
-                  onChange={e => setForm({...form, category:e.target.value})} 
+                  value={form.title} 
+                  onChange={e => setForm({...form, title: e.target.value})} 
                   className="input-field pl-10" 
+                  required
                 />
               </div>
             </div>
             
-            <div className="md:col-span-3 space-y-2">
+            <div className="md:col-span-2 space-y-2">
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Amount</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -122,24 +153,26 @@ const RecurringManager = () => {
                   type="number" 
                   placeholder="0.00" 
                   value={form.amount} 
-                  onChange={e => setForm({...form, amount:e.target.value})} 
+                  onChange={e => setForm({...form, amount: e.target.value})} 
                   className="input-field pl-8" 
+                  required
                 />
               </div>
             </div>
             
             <div className="md:col-span-3 space-y-2">
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Billing Cycle</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Frequency</label>
               <div className="relative">
                 <select 
-                  value={form.interval} 
-                  onChange={e => setForm({...form, interval:e.target.value})} 
+                  value={form.frequency} 
+                  onChange={e => setForm({...form, frequency: e.target.value})} 
                   className="input-field appearance-none"
+                  required
                 >
-                  <option value="">Select Interval</option>
-                  <option value="Weekly">Weekly</option>
-                  <option value="Monthly">Monthly</option>
-                  <option value="Yearly">Yearly</option>
+                  <option value="">Select Frequency</option>
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="monthly">Monthly</option>
                 </select>
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                   <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -147,6 +180,17 @@ const RecurringManager = () => {
                   </svg>
                 </div>
               </div>
+            </div>
+            
+            <div className="md:col-span-2 space-y-2">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Next Due</label>
+              <input 
+                type="date" 
+                value={form.nextDue} 
+                onChange={e => setForm({...form, nextDue: e.target.value})} 
+                className="input-field"
+                required
+              />
             </div>
             
             <div className="md:col-span-2 flex items-end">
@@ -177,23 +221,23 @@ const RecurringManager = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {recurringExpenses.map((exp, index) => (
                 <div
-                  key={exp.id}
+                  key={exp._id}
                   className="group bg-gray-50 dark:bg-gray-800/50 rounded-xl p-5 border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] animate-fade-in cursor-pointer"
                   style={{ animationDelay: `${index * 0.05}s` }}
                 >
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <h4 className="text-lg font-bold text-gray-800 dark:text-gray-100">{exp.category}</h4>
+                      <h4 className="text-lg font-bold text-gray-800 dark:text-gray-100">{exp.title}</h4>
                       <span className={`inline-block px-2 py-1 rounded-md text-xs font-medium mt-1 ${
-                        exp.interval === 'Monthly' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' :
-                        exp.interval === 'Yearly' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300' :
+                        exp.frequency === 'monthly' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' :
+                        exp.frequency === 'weekly' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300' :
                         'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
                       }`}>
-                        {exp.interval}
+                        {exp.frequency.charAt(0).toUpperCase() + exp.frequency.slice(1)}
                       </span>
                     </div>
                     <button
-                      onClick={() => handleDelete(exp.id)}
+                      onClick={() => handleDelete(exp._id)}
                       className="text-gray-400 hover:text-red-500 transition-colors p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
                     >
                       <Trash2 size={18} />
@@ -203,6 +247,9 @@ const RecurringManager = () => {
                     <div>
                       <p className="text-xs text-gray-500 dark:text-gray-400">Cost</p>
                       <p className="text-xl font-bold text-gray-900 dark:text-white">₹{exp.amount}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Next: {new Date(exp.nextDue).toLocaleDateString()}
+                      </p>
                     </div>
                     <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-colors">
                       <ArrowRight size={16} />
