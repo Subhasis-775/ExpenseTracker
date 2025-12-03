@@ -53,7 +53,7 @@ export default function ExpenseFilter({ filters, setFilters }) {
             transition={{ duration: 0.3 }}
             className="mt-4 p-6 border border-gray-200/50 dark:border-gray-700/50 rounded-2xl shadow-soft bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {/* Category Filter */}
               <div className="space-y-2">
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">Category</label>

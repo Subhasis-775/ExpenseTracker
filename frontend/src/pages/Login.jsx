@@ -30,11 +30,11 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/20 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 px-4 transition-all duration-500">
-      <div className="w-full max-w-5xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl shadow-strong rounded-3xl grid md:grid-cols-2 overflow-hidden border border-gray-200/50 dark:border-gray-700/50">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/20 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4 sm:px-6 transition-all duration-500">
+      <div className="w-full max-w-5xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl shadow-strong rounded-2xl md:rounded-3xl grid md:grid-cols-2 overflow-hidden border border-gray-200/50 dark:border-gray-700/50">
         
         {/* Enhanced Branding Section */}
-        <div className="flex flex-col justify-center items-center bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 p-12 text-white relative overflow-hidden">
+        <div className="hidden md:flex flex-col justify-center items-center bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 p-8 md:p-12 text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="relative z-10 text-center">
             <div className="w-20 h-20 mx-auto mb-6 rounded-3xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-glow">
@@ -68,9 +68,9 @@ export const Login = () => {
         </div>
 
         {/* Enhanced Form Section */}
-        <div className="p-12 flex flex-col justify-center">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">
+        <div className="p-6 sm:p-8 md:p-12 flex flex-col justify-center">
+          <div className="text-center mb-6 md:mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">
               Welcome Back! 👋
             </h2>
             <p className="text-gray-500 dark:text-gray-400">

@@ -127,11 +127,11 @@ const PaymentPage = () => {
     <Layout>
       <div className="space-y-8 animate-fade-in">
         {/* Header */}
-        <div className="text-center">
-          <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-glow">
-            <CreditCard className="w-10 h-10 text-white" />
+        <div className="text-center mb-8 md:mb-0">
+          <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-glow">
+            <CreditCard className="w-8 h-8 md:w-10 md:h-10 text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-2">
             Make a Payment
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
@@ -140,7 +140,7 @@ const PaymentPage = () => {
         </div>
 
         {/* Payment Form */}
-        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-soft rounded-2xl p-8 max-w-2xl mx-auto">
+        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-soft rounded-2xl p-4 sm:p-6 md:p-8 max-w-2xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center">
             <DollarSign className="w-6 h-6 mr-2 text-blue-500" />
             Payment Details
@@ -171,7 +171,7 @@ const PaymentPage = () => {
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Payment Method *
               </label>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 xs:grid-cols-3 sm:grid-cols-3 gap-3">
                 {/* UPI Option */}
                 <button
                   type="button"

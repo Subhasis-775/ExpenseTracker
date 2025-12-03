@@ -54,16 +54,16 @@ const HomePage = () => {
             <span className="text-sm font-medium">New: AI-Powered Insights</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 fade-in slide-up">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight mb-8 fade-in slide-up">
             Master Your Money <br />
             <span className="gradient-text">With Confidence</span>
           </h1>
 
-          <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-300 mb-10 fade-in slide-up" style={{ animationDelay: "0.1s" }}>
+          <p className="mt-4 max-w-2xl mx-auto text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-10 fade-in slide-up px-4" style={{ animationDelay: "0.1s" }}>
             Track expenses, manage recurring bills, and gain intelligent insights into your spending habits. The smart way to financial freedom.
           </p>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-4 fade-in slide-up" style={{ animationDelay: "0.2s" }}>
+          <div className="flex flex-col sm:flex-row justify-center gap-4 fade-in slide-up px-4" style={{ animationDelay: "0.2s" }}>
             <Link to="/signup" className="btn-primary flex items-center justify-center gap-2 group text-lg px-8 py-4">
               Start Tracking Free
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -217,8 +217,8 @@ const HomePage = () => {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 dark:border-gray-800 py-12 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+      <footer className="border-t border-gray-200 dark:border-gray-800 py-8 md:py-12 bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6">
           <div className="flex items-center gap-2">
             <DollarSign className="w-6 h-6 text-blue-600" />
             <span className="text-xl font-bold text-gray-900 dark:text-white">ExpenseTracker</span>
@@ -226,7 +226,7 @@ const HomePage = () => {
           <p className="text-gray-500 dark:text-gray-400 text-sm">
             © 2025 ExpenseTracker. All rights reserved.
           </p>
-          <div className="flex gap-6">
+          <div className="flex gap-4 md:gap-6 flex-wrap justify-center">
             <a href="#" className="text-gray-400 hover:text-blue-500 transition-colors">Privacy</a>
             <a href="#" className="text-gray-400 hover:text-blue-500 transition-colors">Terms</a>
             <a href="#" className="text-gray-400 hover:text-blue-500 transition-colors">Contact</a>

@@ -51,7 +51,7 @@ export default function Layout({ children }) {
     <div className="min-h-screen flex bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/20 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-all duration-500">
       {/* Sidebar */}
       <aside
-        className={`fixed md:static top-0 left-0 h-full w-72 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-r border-gray-200/50 dark:border-gray-700/50 shadow-soft p-6 transform transition-all duration-300 z-40
+        className={`fixed md:static top-0 left-0 h-full w-64 md:w-72 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-r border-gray-200/50 dark:border-gray-700/50 shadow-soft p-4 md:p-6 transform transition-all duration-300 z-40
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
       >
         {/* Enhanced Branding */}
@@ -71,94 +71,101 @@ export default function Layout({ children }) {
         <nav className="space-y-3 animate-slide-up">
           <NavLink
             to="/dashboard"
+            onClick={() => setSidebarOpen(false)}
             className={({ isActive }) =>
-              `group flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+              `group flex items-center space-x-3 px-3 md:px-4 py-3 rounded-xl transition-all duration-200 ${
                 isActive
                   ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-glow transform scale-105"
                   : "text-gray-700 dark:text-gray-200 hover:bg-gray-100/80 dark:hover:bg-gray-700/80 hover:transform hover:scale-105"
               }`
             }
           >
-            <Home size={20} className={`${sidebarOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200`} />
-            <span className="font-medium">Dashboard</span>
+            <Home size={20} className="flex-shrink-0" />
+            <span className="font-medium text-sm md:text-base">Dashboard</span>
           </NavLink>
           <NavLink
             to="/recurring"
+            onClick={() => setSidebarOpen(false)}
             className={({ isActive }) =>
-              `group flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+              `group flex items-center space-x-3 px-3 md:px-4 py-3 rounded-xl transition-all duration-200 ${
                 isActive
                   ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-glow transform scale-105"
                   : "text-gray-700 dark:text-gray-200 hover:bg-gray-100/80 dark:hover:bg-gray-700/80 hover:transform hover:scale-105"
               }`
             }
           >
-            <Repeat size={20} className={`${sidebarOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200`} />
-            <span className="font-medium">Recurring Manager</span>
+            <Repeat size={20} className="flex-shrink-0" />
+            <span className="font-medium text-sm md:text-base">Recurring Manager</span>
           </NavLink>
           <NavLink
             to="/budgets"
+            onClick={() => setSidebarOpen(false)}
             className={({ isActive }) =>
-              `group flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+              `group flex items-center space-x-3 px-3 md:px-4 py-3 rounded-xl transition-all duration-200 ${
                 isActive
                   ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-glow transform scale-105"
                   : "text-gray-700 dark:text-gray-200 hover:bg-gray-100/80 dark:hover:bg-gray-700/80 hover:transform hover:scale-105"
               }`
             }
           >
-            <Wallet size={20} className={`${sidebarOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200`} />
-            <span className="font-medium">Budgets</span>
+            <Wallet size={20} className="flex-shrink-0" />
+            <span className="font-medium text-sm md:text-base">Budgets</span>
           </NavLink>
           <NavLink
             to="/goals"
+            onClick={() => setSidebarOpen(false)}
             className={({ isActive }) =>
-              `group flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+              `group flex items-center space-x-3 px-3 md:px-4 py-3 rounded-xl transition-all duration-200 ${
                 isActive
                   ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-glow transform scale-105"
                   : "text-gray-700 dark:text-gray-200 hover:bg-gray-100/80 dark:hover:bg-gray-700/80 hover:transform hover:scale-105"
               }`
             }
           >
-            <Target size={20} className={`${sidebarOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200`} />
-            <span className="font-medium">Goals</span>
+            <Target size={20} className="flex-shrink-0" />
+            <span className="font-medium text-sm md:text-base">Goals</span>
           </NavLink>
           <NavLink
             to="/split-bills"
+            onClick={() => setSidebarOpen(false)}
             className={({ isActive }) =>
-              `group flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+              `group flex items-center space-x-3 px-3 md:px-4 py-3 rounded-xl transition-all duration-200 ${
                 isActive
                   ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-glow transform scale-105"
                   : "text-gray-700 dark:text-gray-200 hover:bg-gray-100/80 dark:hover:bg-gray-700/80 hover:transform hover:scale-105"
               }`
             }
           >
-            <Users size={20} className={`${sidebarOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200`} />
-            <span className="font-medium">Split Bills</span>
+            <Users size={20} className="flex-shrink-0" />
+            <span className="font-medium text-sm md:text-base">Split Bills</span>
           </NavLink>
           <NavLink
             to="/payments"
+            onClick={() => setSidebarOpen(false)}
             className={({ isActive }) =>
-              `group flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+              `group flex items-center space-x-3 px-3 md:px-4 py-3 rounded-xl transition-all duration-200 ${
                 isActive
                   ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-glow transform scale-105"
                   : "text-gray-700 dark:text-gray-200 hover:bg-gray-100/80 dark:hover:bg-gray-700/80 hover:transform hover:scale-105"
               }`
             }
           >
-            <CreditCard size={20} className={`${sidebarOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200`} />
-            <span className="font-medium">Payments</span>
+            <CreditCard size={20} className="flex-shrink-0" />
+            <span className="font-medium text-sm md:text-base">Payments</span>
           </NavLink>
           <NavLink
             to="/subscription"
+            onClick={() => setSidebarOpen(false)}
             className={({ isActive }) =>
-              `group flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+              `group flex items-center space-x-3 px-3 md:px-4 py-3 rounded-xl transition-all duration-200 ${
                 isActive
                   ? "bg-gradient-to-r from-yellow-500 to-yellow-600 text-white shadow-glow transform scale-105"
                   : "text-gray-700 dark:text-gray-200 hover:bg-gray-100/80 dark:hover:bg-gray-700/80 hover:transform hover:scale-105"
               }`
             }
           >
-            <Crown size={20} className={`${sidebarOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200`} />
-            <span className="font-medium">Go Pro</span>
+            <Crown size={20} className="flex-shrink-0" />
+            <span className="font-medium text-sm md:text-base">Go Pro</span>
           </NavLink>
         </nav>
       </aside>
@@ -183,18 +190,19 @@ export default function Layout({ children }) {
             {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
-          <div className="flex items-center space-x-3">
-            <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">
-              Expense Tracker
+          <div className="flex items-center space-x-2 md:space-x-3 overflow-hidden">
+            <h1 className="text-lg md:text-xl font-bold text-gray-800 dark:text-gray-100 truncate">
+              <span className="hidden sm:inline">Expense Tracker</span>
+              <span className="sm:hidden">ET</span>
             </h1>
-            <div className="hidden sm:block w-1 h-6 bg-gradient-to-b from-blue-400 to-blue-600 rounded-full"></div>
-            <p className="hidden sm:block text-sm text-gray-500 dark:text-gray-400 font-medium">
+            <div className="hidden md:block w-1 h-6 bg-gradient-to-b from-blue-400 to-blue-600 rounded-full"></div>
+            <p className="hidden md:block text-sm text-gray-500 dark:text-gray-400 font-medium truncate">
               Welcome back, {user?.name?.split(' ')[0] || 'User'}!
             </p>
           </div>
 
           {/* Enhanced Right Section: Dark mode + Avatar */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 md:space-x-4">
             {/* Notification Bell */}
             <NotificationBell />
 
@@ -282,7 +290,7 @@ export default function Layout({ children }) {
         </header>
 
         {/* Enhanced Content Area */}
-        <main className="flex-1 max-w-7xl mx-auto w-full p-6 md:p-8 lg:p-10 animate-fade-in">
+        <main className="flex-1 max-w-7xl mx-auto w-full p-4 sm:p-6 md:p-8 lg:p-10 animate-fade-in">
           <div className="min-h-[calc(100vh-8rem)]">
             {children}
           </div>

@@ -82,14 +82,14 @@ const BudgetPage = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2">
-              <Wallet className="w-8 h-8 text-blue-600" />
+            <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2">
+              <Wallet className="w-6 h-6 md:w-8 md:h-8 text-blue-600" />
               Budget Manager
             </h1>
             <p className="text-gray-500 dark:text-gray-400">Set limits and track your spending goals</p>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3 md:gap-4">
             <select
               value={month}
               onChange={(e) => setMonth(Number(e.target.value))}
@@ -121,8 +121,8 @@ const BudgetPage = () => {
         {showForm && (
           <div className="glass-card p-6 rounded-2xl animate-slide-down">
             <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">Set Monthly Budget</h3>
-            <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4 items-end">
-              <div className="w-full md:w-1/3">
+            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 items-end">
+              <div className="w-full sm:w-auto sm:flex-1 md:w-1/3">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
                 <select
                   value={formData.category}
@@ -136,7 +136,7 @@ const BudgetPage = () => {
                   ))}
                 </select>
               </div>
-              <div className="w-full md:w-1/3">
+              <div className="w-full sm:w-auto sm:flex-1 md:w-1/3">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Limit Amount (₹)</label>
                 <input
                   type="number"

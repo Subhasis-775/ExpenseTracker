@@ -220,7 +220,7 @@ const Dashboard = () => {
         )}
 
         {/* Enhanced Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           <SummaryCard 
             title="Total Expenses" 
             value={`₹${summary.total.toLocaleString()}`} 
@@ -252,29 +252,29 @@ const Dashboard = () => {
         </div>
 
         {/* Enhanced This Month Summary Card */}
-        <div className="glass-card p-8 rounded-3xl animate-slide-up bg-gradient-to-br from-white/90 to-blue-50/50 dark:from-gray-800/90 dark:to-gray-800/50 border-2 border-blue-200/50 dark:border-blue-700/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.01]" style={{animationDelay: '0.4s'}}>
-          <div className="flex items-center justify-between mb-6">
+        <div className="glass-card p-4 sm:p-6 md:p-8 rounded-2xl md:rounded-3xl animate-slide-up bg-gradient-to-br from-white/90 to-blue-50/50 dark:from-gray-800/90 dark:to-gray-800/50 border-2 border-blue-200/50 dark:border-blue-700/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.01]" style={{animationDelay: '0.4s'}}>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
-                <BarChart2 className="w-7 h-7 text-white" />
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
+                <BarChart2 className="w-6 h-6 md:w-7 md:h-7 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">This Month Summary</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+                <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100">This Month Summary</h2>
+                <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400">{new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
             {/* Total Spent This Month */}
-            <div className="bg-white/80 dark:bg-gray-700/50 p-5 rounded-2xl border border-gray-200/50 dark:border-gray-600/50 hover:shadow-md transition-all">
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Total Spent</p>
-              <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">₹{summary.monthly.toLocaleString()}</p>
+            <div className="bg-white/80 dark:bg-gray-700/50 p-4 md:p-5 rounded-xl md:rounded-2xl border border-gray-200/50 dark:border-gray-600/50 hover:shadow-md transition-all">
+              <p className="text-xs md:text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Total Spent</p>
+              <p className="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400">₹{summary.monthly.toLocaleString()}</p>
             </div>
 
             {/* Comparison with Last Month */}
-            <div className="bg-white/80 dark:bg-gray-700/50 p-5 rounded-2xl border border-gray-200/50 dark:border-gray-600/50 hover:shadow-md transition-all">
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">vs Last Month</p>
+            <div className="bg-white/80 dark:bg-gray-700/50 p-4 md:p-5 rounded-xl md:rounded-2xl border border-gray-200/50 dark:border-gray-600/50 hover:shadow-md transition-all">
+              <p className="text-xs md:text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">vs Last Month</p>
               {(() => {
                 const lastMonth = new Date();
                 lastMonth.setMonth(lastMonth.getMonth() - 1);
@@ -287,8 +287,8 @@ const Dashboard = () => {
                 const isIncrease = difference > 0;
                 
                 return (
-                  <div className="flex items-center gap-2">
-                    <p className={`text-3xl font-bold ${isIncrease ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>
+                  <div className="flex items-center gap-1 md:gap-2">
+                    <p className={`text-2xl md:text-3xl font-bold ${isIncrease ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>
                       {isIncrease ? '↑' : '↓'} {Math.abs(percentChange)}%
                     </p>
                     {isIncrease && <span className="text-xs text-red-600 dark:text-red-400 font-medium">Higher</span>}
@@ -299,8 +299,8 @@ const Dashboard = () => {
             </div>
 
             {/* Top Spending Category */}
-            <div className="bg-white/80 dark:bg-gray-700/50 p-5 rounded-2xl border border-gray-200/50 dark:border-gray-600/50 hover:shadow-md transition-all">
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Top Category</p>
+            <div className="bg-white/80 dark:bg-gray-700/50 p-4 md:p-5 rounded-xl md:rounded-2xl border border-gray-200/50 dark:border-gray-600/50 hover:shadow-md transition-all">
+              <p className="text-xs md:text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Top Category</p>
               {(() => {
                 const thisMonthExpenses = expensesData.expenses.filter(
                   e => new Date(e.date).getMonth() === new Date().getMonth()
@@ -313,7 +313,7 @@ const Dashboard = () => {
                 
                 return topCategory ? (
                   <div>
-                    <p className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-1">{topCategory[0]}</p>
+                    <p className="text-lg md:text-xl font-bold text-gray-800 dark:text-gray-100 mb-1 truncate">{topCategory[0]}</p>
                     <p className="text-sm text-purple-600 dark:text-purple-400 font-semibold">₹{topCategory[1].toLocaleString()}</p>
                   </div>
                 ) : (
@@ -323,15 +323,15 @@ const Dashboard = () => {
             </div>
 
             {/* Daily Average */}
-            <div className="bg-white/80 dark:bg-gray-700/50 p-5 rounded-2xl border border-gray-200/50 dark:border-gray-600/50 hover:shadow-md transition-all">
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Daily Average</p>
+            <div className="bg-white/80 dark:bg-gray-700/50 p-4 md:p-5 rounded-xl md:rounded-2xl border border-gray-200/50 dark:border-gray-600/50 hover:shadow-md transition-all">
+              <p className="text-xs md:text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Daily Average</p>
               {(() => {
                 const today = new Date().getDate();
                 const dailyAvg = today > 0 ? (summary.monthly / today).toFixed(0) : 0;
                 
                 return (
                   <div>
-                    <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">₹{Number(dailyAvg).toLocaleString()}</p>
+                    <p className="text-2xl md:text-3xl font-bold text-orange-600 dark:text-orange-400">₹{Number(dailyAvg).toLocaleString()}</p>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{today} days tracked</p>
                   </div>
                 );
@@ -456,9 +456,9 @@ const Dashboard = () => {
         </div>
 
         {/* Enhanced Add Expense + Expense List */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
           {/* Enhanced Add Expense Form */}
-          <div className="glass-card p-8 rounded-2xl animate-slide-up h-fit sticky top-24">
+          <div className="glass-card p-4 sm:p-6 md:p-8 rounded-2xl animate-slide-up h-fit lg:sticky lg:top-24">
             <UpcomingExpenses />
 
             <div className="text-center mb-8 mt-8">
@@ -585,7 +585,7 @@ const Dashboard = () => {
           </div>
 
           {/* Enhanced Expense List + Filters */}
-          <div className="glass-card p-8 rounded-2xl lg:col-span-2 animate-slide-up" style={{animationDelay: '0.1s'}}>
+          <div className="glass-card p-4 sm:p-6 md:p-8 rounded-2xl lg:col-span-2 animate-slide-up" style={{animationDelay: '0.1s'}}>
             <div className="mb-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
@@ -620,8 +620,8 @@ const Dashboard = () => {
         </div>
 
         {/* Enhanced Charts */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="glass-card p-6 rounded-2xl animate-slide-up">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+          <div className="glass-card p-4 sm:p-6 rounded-2xl animate-slide-up">
             <div className="flex items-center space-x-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/30">
                 <BarChart2 className="w-5 h-5 text-white" />
@@ -631,7 +631,7 @@ const Dashboard = () => {
             <CategoryPieChart data={categoryData} />
           </div>
           
-          <div className="glass-card p-6 rounded-2xl animate-slide-up" style={{animationDelay: '0.1s'}}>
+          <div className="glass-card p-4 sm:p-6 rounded-2xl animate-slide-up" style={{animationDelay: '0.1s'}}>
             <div className="flex items-center space-x-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
                 <BarChart2 className="w-5 h-5 text-white" />
