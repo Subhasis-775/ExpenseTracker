@@ -310,7 +310,7 @@ const PaymentPage = () => {
         </div>
 
         {/* Payment History */}
-        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-soft rounded-2xl p-8">
+        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-soft rounded-2xl p-4 sm:p-6 md:p-8">
           <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center">
             <CreditCard className="w-6 h-6 mr-2 text-blue-500" />
             Payment History

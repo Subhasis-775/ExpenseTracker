@@ -112,8 +112,53 @@ const PaymentHistory = () => {
         </button>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+      {/* Mobile Card View */}
+      <div className="block md:hidden space-y-4">
+        {payments.map((payment) => (
+          <div
+            key={payment._id}
+            className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 border border-gray-200 dark:border-gray-700 space-y-3"
+          >
+            {/* Header: Date & Status */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                <Calendar className="w-4 h-4 mr-2" />
+                {new Date(payment.createdAt).toLocaleDateString('en-IN', {
+                  day: '2-digit',
+                  month: 'short',
+                  year: 'numeric',
+                })}
+              </div>
+              <PaymentStatusBadge status={payment.status} />
+            </div>
+
+            {/* Description */}
+            <div className="text-base font-medium text-gray-900 dark:text-gray-100">
+              {payment.description}
+            </div>
+
+            {/* Amount & Category */}
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-full">
+                {payment.category}
+              </span>
+              <div className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                ₹{payment.amount.toLocaleString()}
+              </div>
+            </div>
+
+            {/* Payment ID */}
+            {payment.razorpayPaymentId && (
+              <div className="text-xs text-gray-500 dark:text-gray-400 font-mono truncate pt-2 border-t border-gray-200 dark:border-gray-600">
+                ID: {payment.razorpayPaymentId}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop Table View */}
+      <div className="hidden md:block overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead className="bg-gray-50 dark:bg-gray-800">
             <tr>
@@ -184,23 +229,25 @@ const PaymentHistory = () => {
 
       {/* Pagination */}
       {pagination.pages > 1 && (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Showing page {pagination.page} of {pagination.pages} ({pagination.total} total)
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-gray-600 dark:text-gray-400 text-center sm:text-left">
+            Page {pagination.page} of {pagination.pages} ({pagination.total} total)
           </p>
           <div className="flex gap-2">
             <button
               onClick={() => handlePageChange(pagination.page - 1)}
               disabled={pagination.page === 1}
-              className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-1"
             >
               <ChevronLeft className="w-5 h-5" />
+              <span className="hidden sm:inline">Previous</span>
             </button>
             <button
               onClick={() => handlePageChange(pagination.page + 1)}
               disabled={pagination.page === pagination.pages}
-              className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-1"
             >
+              <span className="hidden sm:inline">Next</span>
               <ChevronRight className="w-5 h-5" />
             </button>
           </div>
