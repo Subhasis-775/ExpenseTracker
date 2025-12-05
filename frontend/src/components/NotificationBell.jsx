@@ -80,7 +80,7 @@ const NotificationBell = () => {
       </button>
 
       {showDropdown && (
-        <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden z-50 animate-fade-in-down">
+        <div className="fixed sm:absolute left-2 right-2 sm:left-auto sm:right-0 mt-2 sm:w-80 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden z-50 animate-fade-in-down">
           <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
             <h3 className="font-semibold text-gray-800 dark:text-gray-100">Notifications</h3>
             <span className="text-xs text-gray-500 dark:text-gray-400">{notifications.length} New</span>
